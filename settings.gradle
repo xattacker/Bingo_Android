@@ -1,0 +1,3 @@
+include ':app'
+include ':utiltoolkit'
+project(':utiltoolkit').projectDir = new File(settingsDir, '../UtilToolkit/utiltoolkit')

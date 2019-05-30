@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/WHITE">
+
+    <LinearLayout
+	        android:id="@+id/layout_center"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_centerInParent="true"
+	        android:orientation="vertical"
+	        android:gravity="center">
+	        
+            <RelativeLayout
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content">
+			    
+                	 <TableLayout
+	                	    android:id="@+id/layout_ai_grid"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:layout_centerInParent="true"
+					        android:orientation="vertical"
+					        android:gravity="center"/>
+                	 
+                    <LinearLayout
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerVertical="true"
+				        android:layout_toLeftOf="@id/layout_ai_grid"
+				        android:orientation="vertical"
+				        android:padding="6dip">
+				        				
+					    <TextView
+					            android:layout_width="wrap_content"
+					            android:layout_height="wrap_content"
+					            android:text="@string/OPPONENT"
+					            android:textColor="@color/COMPUTER"
+					            android:gravity="center"
+					            android:textSize="@dimen/LARGE_NORMAL_FONT_SIZE"/>
+					    
+					     <TextView
+					            android:id="@+id/text_ai_count"
+					            android:layout_width="wrap_content"
+					            android:layout_height="wrap_content"
+					            android:text="5"
+					            android:textColor="@color/BLUE"
+					            android:gravity="center"
+					            android:textSize="@dimen/LARGE_NORMAL_FONT_SIZE"/>
+				    </LinearLayout>
+    		</RelativeLayout>
+    
+            <RelativeLayout
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginTop="15dip">
+                	 
+                   <TableLayout
+                	    android:id="@+id/layout_player_grid"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerInParent="true"
+					    android:orientation="vertical"
+					    android:gravity="center"/>
+                   
+                   <LinearLayout
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerVertical="true"
+				        android:layout_toLeftOf="@id/layout_player_grid"
+				        android:orientation="vertical"
+					    android:padding="6dip">
+				        				
+					    <TextView
+					            android:layout_width="wrap_content"
+					            android:layout_height="wrap_content"
+					            android:text="@string/PLAYER"
+					            android:textColor="@color/PLAYER"
+					            android:gravity="center"
+					            android:textSize="@dimen/LARGE_NORMAL_FONT_SIZE"/>
+					    
+					     <TextView
+					            android:id="@+id/text_player_count"
+					            android:layout_width="wrap_content"
+					            android:layout_height="wrap_content"
+					            android:text="5"
+					            android:textColor="@color/BLUE"
+					            android:gravity="center"
+					            android:textSize="@dimen/LARGE_NORMAL_FONT_SIZE"/>
+				    </LinearLayout>
+    		</RelativeLayout>
+    </LinearLayout>
+      					 
+    <TextView
+            android:id="@+id/text_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/layout_center"
+            android:layout_centerHorizontal="true"
+            android:text="record"
+            android:textColor="@color/BLACK"
+            android:gravity="center"
+            android:textSize="@dimen/SMALL_NORMAL_FONT_SIZE"
+            android:padding="4dip"/>
+      		      					 
+    <TextView
+            android:id="@+id/text_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:text="version"
+            android:textColor="@color/GRAY"
+            android:gravity="center"
+            android:textSize="@dimen/VERY_SMALL_FONT_SIZE"
+            android:padding="2dip"/>
+      					     			     
+</RelativeLayout>

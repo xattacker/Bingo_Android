@@ -1,0 +1,33 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xattacker.android.bingo">
+
+    <!-- for PowerManager WakeLock -->
+ 	<uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- for shortcut installation -->
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+   
+    <!-- for avoid to filter portrait supported only on market
+         (because set attribute android:screenOrientation=portrait) 
+    -->
+    <uses-feature android:name="android.hardware.screen.portrait" android:required="false"/> 
+    
+    <application
+        android:icon="@drawable/app_icon"
+        android:label="@string/APP_NAME"
+        android:theme="@style/CustomTheme">
+        
+        <activity android:name="com.xattacker.android.bingo.BingoActivity"
+                  android:label="@string/APP_NAME" 
+				  android:screenOrientation="portrait"
+                  android:configChanges="orientation|keyboard|keyboardHidden"
+                  android:launchMode="singleTask" 
+                  android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="APP_NAME">Bingo</string>
+    <string name="COPYRIGHT">Copyright © 2013 Xattacker</string>
+    
+    <string name="OPPONENT">AI</string>
+    <string name="PLAYER">Player</string>
+    <string name="FILL_NUMBER">Please Fill Number</string>
+    <string name="GAME_START">Game Start</string>
+    <string name="WIN_COUNT">Total: win [0], lose [1]</string>
+    <string name="YOU_WIN">You Win</string>
+    <string name="YOU_LOSE">You Lose</string>
+    
+	<string name="VERSION">Version</string>
+    <string name="NOTIFICATION">Notification</string>
+    <string name="WARNING">Warning</string>
+    <string name="ERROR">Error</string>
+    <string name="YES">Yes</string>
+    <string name="NO">No</string>
+    <string name="CONFIRM">Confirm</string>
+    <string name="OK">OK</string>
+    <string name="DONE">Done</string>
+    <string name="CANCEL">Cancel</string>
+
+    <string name="CONFIRM_QUIT">Determined to Quit？</string>
+    <string name="CONFIRM_EXIT">Determined to Exit？</string>
+    <string name="CONFIRM_DELETE">Determined to Delete？</string>
+    <string name="CONFIRM_DELETE_ITEM">Determined to Delete [0]？</string>
+    <string name="CONFIRM_REMOVE">Determined to Remove？</string>
+    <string name="CONFIRM_REMOVE_ITEM">Determined to Remove [0]？</string>
+</resources>

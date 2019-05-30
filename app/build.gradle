@@ -1,0 +1,28 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId 'com.xattacker.android.bingo'
+        minSdkVersion 14
+        targetSdkVersion 26
+        versionCode 5
+        versionName '1.1.1'
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles'proguard.cfg'
+        }
+    }
+    productFlavors {
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation project(':utiltoolkit')
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+}

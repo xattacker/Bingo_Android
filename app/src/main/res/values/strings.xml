@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="APP_NAME">Bingo</string>
+    <string name="COPYRIGHT">Copyright © 2013 Xattacker</string>
+    
+    <string name="OPPONENT">對手</string>
+    <string name="PLAYER">玩家</string>
+    <string name="FILL_NUMBER">請先填入數字</string>
+    <string name="GAME_START">遊戲開始</string>
+    <string name="WIN_COUNT">累計: [0]勝 [1]負</string>
+    <string name="YOU_WIN">你贏了</string>
+    <string name="YOU_LOSE">你輸了</string>
+    
+	<string name="VERSION">版本</string>
+    <string name="NOTIFICATION">通知</string>
+    <string name="WARNING">警告</string>
+    <string name="ERROR">錯誤</string>
+    <string name="YES">是</string>
+    <string name="NO">否</string>
+    <string name="CONFIRM">確認</string>
+    <string name="OK">確定</string>
+    <string name="DONE">完成</string>
+    <string name="CANCEL">取消</string>
+    
+    <string name="CONFIRM_QUIT">確認退出?</string>
+    <string name="CONFIRM_EXIT">確認離開?</string>
+    <string name="CONFIRM_DELETE">確認刪除?</string>
+    <string name="CONFIRM_DELETE_ITEM">確認刪除[0]?</string>
+    <string name="CONFIRM_REMOVE">確認移除?</string>
+    <string name="CONFIRM_REMOVE_ITEM">確認移除[0]?</string>
+</resources>
