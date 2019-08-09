@@ -1,0 +1,433 @@
+package com.xattacker.android.bingo.logic
+
+class BingoLogic(private val _listener: BingoLogicListener?)
+{
+    companion object
+    {
+        private val PLAYER = 1
+        private val COMPUTER = 0
+    }
+
+    private var _locX: Int = 0
+    private var _locY: Int = 0 /* 下棋位置 */
+    private var _connected: Int = 0 /* 連棋數 */
+    private val _connects: IntArray // 雙方連線數
+    private val _weight: IntArray // 權重
+
+    val winner: PlayerType
+         get() = _turn
+
+    private var _turn: PlayerType = PlayerType.PLAYER
+
+    private var _gameOver: Boolean = false
+    private val _grids: Array<Array<Array<BingoGrid?>>>
+
+    enum class PlayerType private constructor(private val _value: Int)
+    {
+        COMPUTER(0), PLAYER(1);
+
+        fun value(): Int
+        {
+            return _value
+        }
+
+        companion object
+        {
+            fun parse(aValue: Int): PlayerType
+            {
+                for (type in PlayerType.values())
+                {
+                    if (type._value == aValue)
+                    {
+                        return type
+                    }
+                }
+
+                return PLAYER
+            }
+        }
+    }
+
+    init
+    {
+        _connects = IntArray(2)
+        _weight = IntArray(3)
+        _connected = 0
+        _gameOver = false
+        _grids = Array(2) {Array(5) {arrayOfNulls<BingoGrid>(5)}}
+    }
+
+    fun restart()
+    {
+        _connected = 0
+        _weight[2] = 0
+        _gameOver = false
+
+        for (i in 0 .. 1)
+        {
+            _connects[i] = 0
+
+            for (j in 0 .. 4)
+            {
+                for (k in 0 .. 4)
+                {
+                    _grids[i][j][k]?.initial()
+                }
+            }
+        }
+    }
+
+    fun addGrid(aType: PlayerType, aGrid: BingoGrid, aX: Int, aY: Int)
+    {
+        var index = -1
+
+        when (aType)
+        {
+            BingoLogic.PlayerType.COMPUTER -> index = COMPUTER
+            BingoLogic.PlayerType.PLAYER -> index = PLAYER
+        }
+
+        _grids[index][aX][aY] = aGrid
+        _grids[index][aX][aY]?.type = aType
+    }
+
+    fun getConnectionCount(aType: PlayerType): Int
+    {
+        return _connects[aType.value()]
+    }
+
+    fun resetComputer()
+    {
+        var temp_value = 0
+        var x = 0
+        var y = 0
+
+        for (i in 0 .. 4)
+        {
+            for (j in 0 .. 4)
+            {
+                _grids[COMPUTER][i][j]?.value = i * 5 + (j + 1)
+            }
+        }
+
+        for (i in 0 .. 4)
+        {
+            for (j in 0 .. 4)
+            {
+                temp_value = _grids[COMPUTER][i][j]?.value ?: 0
+
+                x = (Math.random() * 5).toInt()
+                y = (Math.random() * 5).toInt()
+
+                _grids[COMPUTER][i][j]?.value = _grids[COMPUTER][x][y]?.value ?: 0
+                _grids[COMPUTER][x][y]?.value = temp_value
+            }
+        }
+    }
+
+    fun winCheck(aX: Int, aY: Int)
+    {
+        winCheck(PlayerType.PLAYER, aX, aY, true)
+    }
+
+    private fun winCheck(aType: PlayerType, aX: Int, aY: Int, aRedo: Boolean)
+    {
+        if (!_gameOver)
+        {
+            _turn = aType
+            _locX = aX
+            _locY = aY
+
+            winCheck(ConnectedDirection.OBLIQUE_1)
+
+            if (!_gameOver && aRedo)
+            {
+                reDo(_grids[_turn.value()][aX][aY]?.value ?: 0)
+
+                if (aType == PlayerType.PLAYER && !_gameOver)
+                {
+                    runAI()
+                }
+            }
+        }
+    }
+
+    private fun winCheck(aDirection: ConnectedDirection)
+    {
+        if (aDirection == ConnectedDirection.NIL)
+        {
+            return
+        }
+
+
+        val offset = getOffsetValue(aDirection)
+        var x = _locX + offset[0]
+        var y = _locY + offset[1]
+
+        _connected = 1
+
+        while (x >= 0 && x < 5 && y >= 0 && y < 5 && _grids[_turn.value()][x][y]?.isSelectedOn == true)
+        {
+            _connected = _connected + 1
+            x = x + offset[0]
+            y = y + offset[1]
+        }
+
+        x = _locX - offset[0]
+        y = _locY - offset[1]
+
+        while (x >= 0 && x < 5 && y >= 0 && y < 5 && _grids[_turn.value()][x][y]?.isSelectedOn == true)
+        {
+            _connected = _connected + 1
+            x = x - offset[0]
+            y = y - offset[1]
+        }
+
+
+        if (_connected >= 5)
+        {
+            x = _locX
+            y = _locY
+
+            while (x >= 0 && x < 5 && y >= 0 && y < 5 && _grids[_turn.value()][x][y]?.isSelectedOn == true)
+            {
+                _grids[_turn.value()][x][y]?.setConnectedLine(aDirection, true)
+                x = x + offset[0]
+                y = y + offset[1]
+            }
+
+            x = _locX - offset[0]
+            y = _locY - offset[1]
+
+            while (x >= 0 && x < 5 && y >= 0 && y < 5 && _grids[_turn.value()][x][y]?.isSelectedOn == true)
+            {
+                _grids[_turn.value()][x][y]?.setConnectedLine(aDirection, true)
+                x = x - offset[0]
+                y = y - offset[1]
+            }
+
+            _connects[_turn.value()] = _connects[_turn.value()] + 1
+
+            _listener?.onLineConnected(_turn, _connects[_turn.value()])
+
+            if (_connects[_turn.value()] >= 5 && !_gameOver)
+            {
+                _listener?.onWon(_turn)
+
+                _gameOver = true
+            }
+        }
+
+        if (!_gameOver)
+        {
+            winCheck(aDirection.next())
+        }
+    }
+
+    private fun getOffsetValue(aDirection: ConnectedDirection): IntArray
+    {
+        val offset = IntArray(2)
+
+        when (aDirection)
+        {
+            ConnectedDirection.OBLIQUE_1 ->
+            {
+                offset[0] = 1
+                offset[1] = -1
+            }
+
+            ConnectedDirection.OBLIQUE_2 ->
+            {
+                offset[1] = 1
+                offset [0] = offset[1]
+            }
+
+             ConnectedDirection.HORIZONTAL ->
+            {
+                offset[0] = 1
+                offset[1] = 0
+            }
+
+            ConnectedDirection.VERTICAL ->
+            {
+                offset[0] = 0
+                offset[1] = 1
+            }
+
+            else ->
+            {
+            }
+        }
+
+        return offset
+    }
+
+    // after the one side done, the other side do the same value
+    private fun reDo(aValue: Int)
+    {
+        _turn = if (_turn == PlayerType.PLAYER) PlayerType.COMPUTER else PlayerType.PLAYER
+
+        for (i in 0 .. 4)
+        {
+            for (j in 0 .. 4)
+            {
+                if (_grids[_turn.value()][i][j]?.value == aValue)
+                {
+                    _grids[_turn.value()][i][j]?.isSelectedOn = true
+                    winCheck(_turn, i, j, false)
+
+                    break
+                }
+            }
+        }
+    }
+
+    private fun runAI()
+    {
+        _turn = PlayerType.COMPUTER
+
+        for (i in 0 .. 4)
+        {
+            for (j in 0 .. 4)
+            {
+                if (_grids[_turn.value()][i][j]?.isSelectedOn == false)
+                {
+                    runAI2(i, j)
+                }
+            }
+        }
+
+        if (_weight[2] > 1)
+        {
+            _weight[2] = 0
+            _grids[_turn.value()][_weight[0]][_weight[1]]?.isSelectedOn = true
+            winCheck(_turn, _weight[0], _weight[1], true)
+        }
+        else
+        {
+            randomAI()
+        }
+    }
+
+    private fun runAI2(aX: Int, aY: Int)
+    {
+        _locX = aX
+        _locY = aY
+        var offset_x = 0
+        var offset_y = 0
+        var w = 0
+        var dir = ConnectedDirection.OBLIQUE_1
+
+        do
+        {
+            when (dir)
+            {
+                ConnectedDirection.OBLIQUE_1 ->
+                {
+                    offset_x = 1
+                    offset_y = -1
+                }
+
+                ConnectedDirection.OBLIQUE_2 ->
+                {
+                    offset_y = 1
+                    offset_x = offset_y
+                }
+
+                ConnectedDirection.HORIZONTAL ->
+                {
+                    offset_x = 1
+                    offset_y = 0
+                }
+
+                ConnectedDirection.VERTICAL ->
+                {
+                    offset_x = 0
+                    offset_y = 1
+                }
+
+                else ->
+                {
+                }
+            }
+
+            w = w + calculateWeight(offset_x, offset_y)
+            dir = dir.next()
+
+        } while (dir != ConnectedDirection.NIL)
+
+        if (w > _weight[2])
+        {
+            _weight[0] = _locX
+            _weight[1] = _locY
+            _weight[2] = w
+        }
+    }
+
+    private fun randomAI()
+    {
+        var x = 0
+        var y = 0
+
+        if (_grids[_turn.value()][2][2]?.isSelectedOn == false) // the first priority is center
+        {
+            y = 2
+            x = y
+        }
+        else
+        {
+            do
+            {
+                x = (Math.random() * 5).toInt()
+                y = (Math.random() * 5).toInt()
+
+            } while (_grids[_turn.value()][x][y]?.isSelectedOn == true)
+        }
+
+        _grids[_turn.value()][x][y]?.isSelectedOn = true
+
+        winCheck(_turn, x, y, true)
+    }
+
+    private fun calculateWeight(aOffsetX: Int, aOffsetY: Int): Int
+    {
+        var w = 0
+        _connected = 0
+        var x = _locX
+        var y = _locY
+
+        while (x >= 0 && x < 5 && y >= 0 && y < 5)
+        {
+            if (_grids[COMPUTER][x][y]?.isSelectedOn == true)
+            {
+                w = w + 1
+            }
+
+            _connected = _connected + 1
+            x = x + aOffsetX
+            y = y + aOffsetY
+        }
+
+        x = _locX - aOffsetX
+        y = _locY - aOffsetY
+
+        while (x >= 0 && x < 5 && y >= 0 && y < 5)
+        {
+            if (_grids[COMPUTER][x][y]?.isSelectedOn == true)
+            {
+                w = w + 1
+            }
+
+            _connected = _connected + 1
+            x = x - aOffsetX
+            y = y - aOffsetY
+        }
+
+        if (w == 4) // 加重已有四個被選擇的行列權重
+        {
+            w = w + 1
+        }
+
+        return if (_connected == 5) w * w else 0
+    }
+}
