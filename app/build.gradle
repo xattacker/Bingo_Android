@@ -5,11 +5,11 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        applicationId 'com.xatacker.android.bingo'
+        applicationId 'com.xattacker.android.bingo'
         minSdkVersion 18
         targetSdkVersion 28
-        versionCode 5
-        versionName '1.1.1'
+        versionCode 6
+        versionName '1.1.2'
     }
 
     buildTypes {
