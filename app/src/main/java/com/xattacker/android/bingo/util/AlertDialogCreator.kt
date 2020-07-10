@@ -26,7 +26,6 @@ sealed class AlertButtonStyle
     open class TwiceButton(open val button1: Int, open val button2: Int): AlertButtonStyle()
     open class SingleButton(open val button: Int): AlertButtonStyle()
 
-    // object
     object YesNo: TwiceButton(R.string.YES, R.string.NO)
     object OK: SingleButton(R.string.OK)
 }
@@ -62,13 +61,13 @@ object AlertDialogCreator
 
         when (aStyle)
         {
-            is AlertButtonStyle.YesNo ->
+            is AlertButtonStyle.TwiceButton ->
             {
                 button1 = aContext.getString(aStyle.button1)
                 button2 = aContext.getString(aStyle.button2)
             }
 
-            is AlertButtonStyle.OK -> button1 = aContext.getString(aStyle.button)
+            is AlertButtonStyle.SingleButton -> button1 = aContext.getString(aStyle.button)
         }
 
         val listener = object : DialogInterface.OnClickListener
