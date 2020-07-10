@@ -43,7 +43,7 @@ object AppUtility
     {
         var str = aContext.getString(aResId)
 
-        if (aResParameters != null && aResParameters.size > 0)
+        if (aResParameters.size > 0)
         {
             var index = -1
             var replaced: String? = null

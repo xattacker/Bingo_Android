@@ -1,5 +1,22 @@
 <resources>
     <style name="CustomTheme" parent="android:style/Theme.NoTitleBar">
         <item name="android:windowBackground">@null</item>
+
+        <item name="android:dialogTheme">@style/LightDialogStyle</item>
+        <item name="android:alertDialogTheme">@style/LightDialogStyle</item>
+    </style>
+
+    <style name="LightDialogStyle" parent="@android:style/Theme.Holo.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
+    </style>
+
+    <style name="DarkDialogStyle" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
     </style>
 </resources>

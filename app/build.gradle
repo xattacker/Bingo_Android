@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion 28
 
+    viewBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId 'com.xattacker.android.bingo'
         minSdkVersion 18

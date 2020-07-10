@@ -15,6 +15,7 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
+import com.xattacker.android.bingo.databinding.ActivityMainBinding
 import com.xattacker.android.bingo.logic.BingoLogic
 import com.xattacker.android.bingo.logic.BingoLogic.PlayerType
 import com.xattacker.android.bingo.logic.BingoLogicListener
@@ -23,11 +24,7 @@ import com.xattacker.android.bingo.util.*
 
 class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 {
-    private var _aiTable: TableLayout? = null
-    private var _playerTable: TableLayout? = null
-    private var _aiCountView: TextView? = null
-    private var _playerCountView: TextView? = null
-    private var _recordView: TextView? = null
+    private lateinit var binding: ActivityMainBinding
 
     private var _status: GameStatus? = null
     private var _count = 0 // 佈子數, 當玩家把25個數字都佈完後 開始遊戲
@@ -51,18 +48,15 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 
         setContentView(R.layout.activity_main)
 
-        _aiTable = findViewById(R.id.layout_ai_grid)
-        _playerTable = findViewById(R.id.layout_player_grid)
-        _aiCountView = findViewById(R.id.text_ai_count)
-        _playerCountView = findViewById(R.id.text_player_count)
-        _recordView = findViewById(R.id.text_record)
+        // use view Binding mode
+        binding = ActivityMainBinding.inflate(this.layoutInflater)
+        setContentView(binding.root)
 
-        addGrid(_aiTable, false)
-        addGrid(_playerTable, true)
+        addGrid(binding.layoutAiGrid, false)
+        addGrid(binding.layoutPlayerGrid, true)
         updateRecordView()
 
-        val text = findViewById<View>(R.id.text_version) as TextView
-        text.text = "V " + (AppProperties.appVersion ?: "")
+        binding.textVersion.text = "v " + (AppProperties.appVersion ?: "")
 
         restart()
     }
@@ -92,11 +86,11 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
                             0f)
             ani.duration = 300
             ani.interpolator = AccelerateInterpolator()
-            ani.setAnimationListener(LastViewRemover(_playerTable))
+            ani.setAnimationListener(LastViewRemover(binding.layoutPlayerGrid))
 
-            _playerTable?.startAnimation(ani)
+            binding.layoutPlayerGrid.startAnimation(ani)
         },
-            500)
+        500)
     }
 
     override fun onDestroy()
@@ -174,11 +168,11 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
     {
         if (aType == PlayerType.COMPUTER)
         {
-            _aiCountView?.text = aCount.toString()
+            binding.textAiCount.text = aCount.toString()
         }
         else // PLAYER
         {
-            _playerCountView?.text = aCount.toString()
+            binding.textPlayerCount.text = aCount.toString()
         }
     }
 
@@ -217,22 +211,22 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         val builder = StringBuilder()
         builder.append(AppUtility.getString(this, R.string.WIN_COUNT, _recorder?.winCount.toString(), _recorder?.lostCount.toString()))
 
-        _recordView?.text = builder.toString()
+        binding.textRecord.text = builder.toString()
     }
 
     private fun restart()
     {
         _status = GameStatus.PREPARE
         _count = 0
-        _aiCountView?.text = ""
-        _playerCountView?.text = ""
+        binding.textAiCount.text = ""
+        binding.textPlayerCount.text = ""
         _logic?.restart()
     }
 
     private fun addGrid(aTable: TableLayout?, aClickable: Boolean)
     {
-        var row: TableRow? = null
-        var grid: GridView? = null
+        var row: TableRow?
+        var grid: GridView?
         val width = CustomProperties.getScreenWidth(0.125f)
         val padding = (1.8 * AppProperties.density).toInt()
 
@@ -270,8 +264,8 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 
     private fun showAnimation()
     {
-        setLayoutAnimation(_aiTable, 0, -1)
-        setLayoutAnimation(_playerTable, 0, 1)
+        setLayoutAnimation(binding.layoutAiGrid, 0, -1)
+        setLayoutAnimation(binding.layoutPlayerGrid, 0, 1)
     }
 
     private fun setLayoutAnimation(aGroup: ViewGroup?, aXValue: Int, aYValue: Int)

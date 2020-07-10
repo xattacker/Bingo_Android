@@ -115,6 +115,6 @@
             android:textColor="@color/GRAY"
             android:gravity="center"
             android:textSize="@dimen/VERY_SMALL_FONT_SIZE"
-            android:padding="2dip"/>
+            android:padding="3dip"/>
       					     			     
 </RelativeLayout>
