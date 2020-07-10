@@ -109,7 +109,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         if (aKeyCode == KeyEvent.KEYCODE_BACK)
         {
             AlertDialogCreator.showDialog(
-                AlertTitleType.CONFIRM_ALERT,
+                AlertTitleType.Confirm,
                 AlertButtonStyle.YesNo,
                 getString(R.string.CONFIRM_EXIT),
                 this) {
@@ -199,7 +199,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         updateRecordView()
 
         AlertDialogCreator.showDialog(
-            AlertTitleType.NOTIFICATION_ALERT,
+            AlertTitleType.Notification,
             AlertButtonStyle.OK,
             getString(res),
             this) {

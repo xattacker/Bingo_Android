@@ -6,19 +6,14 @@ import android.content.DialogInterface
 import android.widget.ListAdapter
 import com.xattacker.android.bingo.R
 
-enum class AlertTitleType
+sealed class AlertTitleType(val value: Int)
 {
-    NOTIFICATION_ALERT(R.string.NOTIFICATION),
-    WARNING_ALERT(R.string.WARNING),
-    ERROR_ALERT(R.string.ERROR),
-    CONFIRM_ALERT(R.string.CONFIRM);
+    open class CustomTitle(val title: String): AlertTitleType(-1)
 
-    val value: Int
-
-    constructor(value: Int)
-    {
-        this.value = value
-    }
+    object Notification: AlertTitleType(R.string.NOTIFICATION)
+    object Warning: AlertTitleType(R.string.WARNING)
+    object Error: AlertTitleType(R.string.ERROR)
+    object Confirm: AlertTitleType(R.string.CONFIRM)
 }
 
 sealed class AlertButtonStyle
@@ -90,7 +85,7 @@ object AlertDialogCreator
     }
 
     fun showDialog(
-        aTitle: String,
+        aTitle: AlertTitleType,
         aAdapter: ListAdapter,
         aContext: Context,
         aClicked: (dialog: DialogInterface?, which: Int) -> Unit)
@@ -104,7 +99,16 @@ object AlertDialogCreator
         }
 
         val builder = createBuilder(aContext)
-        builder.setTitle(aTitle)
+
+        when (aTitle)
+        {
+            is AlertTitleType.CustomTitle ->
+                builder.setTitle(aTitle.title)
+
+            else ->
+                builder.setTitle(aContext.getString(aTitle.value))
+        }
+
         builder.setAdapter(aAdapter, listener)
 
         builder.setPositiveButton(aContext.getString(R.string.CANCEL)) {dialog, which -> dialog.dismiss()}
