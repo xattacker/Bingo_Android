@@ -6,4 +6,4 @@ link on google play:
 
 
 screen cut:<br>
-![avatar](/res/screen_cut.png)<br>
+<img src="/res/screen_cut.png" alt="screen cut" width="50%" height="50%" align="bottom" />
