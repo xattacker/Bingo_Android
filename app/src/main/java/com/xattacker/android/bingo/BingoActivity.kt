@@ -110,7 +110,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         {
             AlertDialogCreator.showDialog(
                 AlertTitleType.CONFIRM_ALERT,
-                AlertButtonStyle.BUTTON_YES_NO,
+                AlertButtonStyle.YesNo,
                 getString(R.string.CONFIRM_EXIT),
                 this) {
                 dialog, which ->
@@ -200,7 +200,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 
         AlertDialogCreator.showDialog(
             AlertTitleType.NOTIFICATION_ALERT,
-            AlertButtonStyle.BUTTON_OK,
+            AlertButtonStyle.OK,
             getString(res),
             this) {
             dialog, which ->

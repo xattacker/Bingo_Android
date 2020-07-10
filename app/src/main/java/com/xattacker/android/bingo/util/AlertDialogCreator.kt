@@ -15,17 +15,22 @@ enum class AlertTitleType
 
     val value: Int
 
-    private constructor(value: Int)
+    constructor(value: Int)
     {
         this.value = value
     }
 }
 
-enum class AlertButtonStyle
+sealed class AlertButtonStyle
 {
-    BUTTON_YES_NO,
-    BUTTON_OK
+    open class TwiceButton(open val button1: Int, open val button2: Int): AlertButtonStyle()
+    open class SingleButton(open val button: Int): AlertButtonStyle()
+
+    // object
+    object YesNo: TwiceButton(R.string.YES, R.string.NO)
+    object OK: SingleButton(R.string.OK)
 }
+
 
 object AlertDialogCreator
 {
@@ -57,13 +62,13 @@ object AlertDialogCreator
 
         when (aStyle)
         {
-            AlertButtonStyle.BUTTON_YES_NO ->
+            is AlertButtonStyle.YesNo ->
             {
-                button1 = aContext.getString(R.string.YES)
-                button2 = aContext.getString(R.string.NO)
+                button1 = aContext.getString(aStyle.button1)
+                button2 = aContext.getString(aStyle.button2)
             }
 
-            AlertButtonStyle.BUTTON_OK -> button1 = aContext.getString(R.string.OK)
+            is AlertButtonStyle.OK -> button1 = aContext.getString(aStyle.button)
         }
 
         val listener = object : DialogInterface.OnClickListener
@@ -114,6 +119,7 @@ object AlertDialogCreator
         val builder = AlertDialog.Builder(aContext)
         builder.setIcon(R.drawable.app_icon)
         builder.setInverseBackgroundForced(true)
+        builder.setCancelable(false)
 
         return builder
     }
