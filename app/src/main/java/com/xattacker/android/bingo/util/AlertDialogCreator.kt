@@ -31,7 +31,16 @@ object AlertDialogCreator
     fun showDialog(aType: AlertTitleType, aText: String, aContext: Context)
     {
         val builder = createBuilder(aContext)
-        builder.setTitle(aContext.getString(aType.value))
+
+        when (aType)
+        {
+            is AlertTitleType.CustomTitle ->
+                builder.setTitle(aType.title)
+
+            else ->
+                builder.setTitle(aContext.getString(aType.value))
+        }
+        
         builder.setMessage(aText)
 
         builder.setPositiveButton(aContext.getString(R.string.OK)) {dialog, which -> dialog.dismiss()}
@@ -51,7 +60,16 @@ object AlertDialogCreator
         var button2: String? = null
 
         val builder = createBuilder(aContext)
-        builder.setTitle(aContext.getString(aType.value))
+        
+        when (aType)
+        {
+            is AlertTitleType.CustomTitle ->
+                builder.setTitle(aType.title)
+
+            else ->
+                builder.setTitle(aContext.getString(aType.value))
+        }
+        
         builder.setMessage(aText)
 
         when (aStyle)
