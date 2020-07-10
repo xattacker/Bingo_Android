@@ -31,6 +31,7 @@
 				        android:layout_centerVertical="true"
 				        android:layout_toLeftOf="@id/layout_ai_grid"
 				        android:orientation="vertical"
+						android:gravity="center"
 				        android:padding="6dip">
 				        				
 					    <TextView
@@ -39,16 +40,13 @@
 					            android:text="@string/OPPONENT"
 					            android:textColor="@color/COMPUTER"
 					            android:gravity="center"
-					            android:textSize="@dimen/LARGE_NORMAL_FONT_SIZE"/>
-					    
-					     <TextView
-					            android:id="@+id/text_ai_count"
-					            android:layout_width="wrap_content"
-					            android:layout_height="wrap_content"
-					            android:text="5"
-					            android:textColor="@color/BLUE"
-					            android:gravity="center"
-					            android:textSize="@dimen/LARGE_NORMAL_FONT_SIZE"/>
+					            android:textSize="@dimen/LARGE_NORMAL_FONT_SIZE"
+							    android:layout_marginBottom="6dp"/>
+
+						<com.xattacker.android.bingo.CountView
+								android:id="@+id/view_ai_count"
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content" />
 				    </LinearLayout>
     		</RelativeLayout>
     
@@ -79,16 +77,13 @@
 					            android:text="@string/PLAYER"
 					            android:textColor="@color/PLAYER"
 					            android:gravity="center"
-					            android:textSize="@dimen/LARGE_NORMAL_FONT_SIZE"/>
-					    
-					     <TextView
-					            android:id="@+id/text_player_count"
-					            android:layout_width="wrap_content"
-					            android:layout_height="wrap_content"
-					            android:text="5"
-					            android:textColor="@color/BLUE"
-					            android:gravity="center"
-					            android:textSize="@dimen/LARGE_NORMAL_FONT_SIZE"/>
+					            android:textSize="@dimen/LARGE_NORMAL_FONT_SIZE"
+							    android:layout_marginBottom="6dp"/>
+
+					   <com.xattacker.android.bingo.CountView
+						   android:id="@+id/view_player_count"
+						   android:layout_width="match_parent"
+						   android:layout_height="wrap_content" />
 				    </LinearLayout>
     		</RelativeLayout>
     </LinearLayout>

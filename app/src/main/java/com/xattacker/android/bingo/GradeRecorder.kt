@@ -4,6 +4,7 @@ class GradeRecorder
 {
     var winCount: Int = 0
         private set
+
     var lostCount: Int = 0
         private set
 

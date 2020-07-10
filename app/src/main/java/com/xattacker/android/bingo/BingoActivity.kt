@@ -52,11 +52,14 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         binding = ActivityMainBinding.inflate(this.layoutInflater)
         setContentView(binding.root)
 
-        addGrid(binding.layoutAiGrid, false)
-        addGrid(binding.layoutPlayerGrid, true)
+        setupGrid(binding.layoutAiGrid, false)
+        setupGrid(binding.layoutPlayerGrid, true)
         updateRecordView()
 
         binding.textVersion.text = "v " + (AppProperties.appVersion ?: "")
+
+        setupCountView(binding.viewAiCount)
+        setupCountView(binding.viewPlayerCount)
 
         restart()
     }
@@ -168,15 +171,15 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
     {
         if (aType == PlayerType.COMPUTER)
         {
-            binding.textAiCount.text = aCount.toString()
+            binding.viewAiCount.setCount(aCount)
         }
         else // PLAYER
         {
-            binding.textPlayerCount.text = aCount.toString()
+            binding.viewPlayerCount.setCount(aCount)
         }
     }
 
-    override fun onWon(aWinner: PlayerType?)
+    override fun onWon(aWinner: PlayerType)
     {
         var res = -1
 
@@ -218,12 +221,14 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
     {
         _status = GameStatus.PREPARE
         _count = 0
-        binding.textAiCount.text = ""
-        binding.textPlayerCount.text = ""
+
+        binding.viewAiCount.reset()
+        binding.viewPlayerCount.reset()
+
         _logic?.restart()
     }
 
-    private fun addGrid(aTable: TableLayout?, aClickable: Boolean)
+    private fun setupGrid(aTable: TableLayout?, aClickable: Boolean)
     {
         var row: TableRow?
         var grid: GridView?
@@ -260,6 +265,12 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
                 row.addView(grid, para)
             }
         }
+    }
+
+    private fun setupCountView(countView: CountView)
+    {
+        countView.layoutParams.height =  CustomProperties.getScreenWidth(0.1f)
+        countView.layoutParams.width = CustomProperties.getScreenWidth(0.1f)
     }
 
     private fun showAnimation()
