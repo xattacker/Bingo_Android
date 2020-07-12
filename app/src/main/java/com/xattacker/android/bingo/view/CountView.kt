@@ -1,4 +1,4 @@
-package com.xattacker.android.bingo
+package com.xattacker.android.bingo.view
 
 import android.content.Context
 import android.graphics.Canvas

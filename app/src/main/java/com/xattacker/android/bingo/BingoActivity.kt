@@ -13,14 +13,15 @@ import android.view.ViewGroup
 import android.view.animation.*
 import android.widget.TableLayout
 import android.widget.TableRow
-import android.widget.TextView
 import android.widget.Toast
 import com.xattacker.android.bingo.databinding.ActivityMainBinding
 import com.xattacker.android.bingo.logic.BingoLogic
 import com.xattacker.android.bingo.logic.BingoLogic.PlayerType
 import com.xattacker.android.bingo.logic.BingoLogicListener
 import com.xattacker.android.bingo.util.*
-
+import com.xattacker.android.bingo.view.CountView
+import com.xattacker.android.bingo.view.GridView
+import com.xattacker.android.bingo.view.LastViewRemover
 
 class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 {
@@ -144,10 +145,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 
                     if (_count >= 25)
                     {
-                        _logic?.resetComputer()
-                        _status = GameStatus.PLAYING
-
-                        Toast.makeText(this, R.string.GAME_START, Toast.LENGTH_SHORT).show()
+                        startPlaying()
                     }
                 }
             }
@@ -184,6 +182,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         var res = -1
 
         _status = GameStatus.END
+        updateButtonWithStatus()
 
         if (aWinner == PlayerType.COMPUTER)
         {
@@ -200,13 +199,20 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 
         AlertDialogCreator.showDialog(
             AlertTitleType.Notification,
-            AlertButtonStyle.OK,
             getString(res),
-            this) {
-            dialog, which ->
-            restart()
-            showAnimation()
-        }
+            this)
+    }
+
+    fun onAutoFillNumClick(view: View)
+    {
+        _logic?.fillNumber(false)
+        startPlaying()
+    }
+
+    fun onRestartClick(view: View)
+    {
+        restart()
+        showAnimation()
     }
 
     private fun updateRecordView()
@@ -221,11 +227,51 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
     {
         _status = GameStatus.PREPARE
         _count = 0
+        updateButtonWithStatus()
 
         binding.viewAiCount.reset()
         binding.viewPlayerCount.reset()
 
         _logic?.restart()
+    }
+
+    private fun startPlaying()
+    {
+        _logic?.fillNumber()
+        _status = GameStatus.PLAYING
+        updateButtonWithStatus()
+
+        Toast.makeText(this, R.string.GAME_START, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateButtonWithStatus()
+    {
+        when (_status)
+        {
+            GameStatus.PREPARE ->
+             {
+                 binding.buttonAutoFill.visibility = View.VISIBLE
+                 binding.buttonRestart.visibility = View.GONE
+             }
+
+            GameStatus.PLAYING ->
+            {
+                binding.buttonAutoFill.visibility = View.INVISIBLE
+                binding.buttonRestart.visibility = View.INVISIBLE
+            }
+
+            GameStatus.END ->
+            {
+                binding.buttonAutoFill.visibility = View.GONE
+                binding.buttonRestart.visibility = View.VISIBLE
+            }
+
+            else ->
+            {
+                binding.buttonAutoFill.visibility = View.INVISIBLE
+                binding.buttonRestart.visibility = View.INVISIBLE
+            }
+        }
     }
 
     private fun setupGrid(aTable: TableLayout?, aClickable: Boolean)

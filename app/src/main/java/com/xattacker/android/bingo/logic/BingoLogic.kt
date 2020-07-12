@@ -96,8 +96,9 @@ class BingoLogic(private val _listener: BingoLogicListener?)
         return _connects[aType.value()]
     }
 
-    fun resetComputer()
+    fun fillNumber(computer: Boolean = true)
     {
+        val tag = if (computer) COMPUTER else PLAYER
         var temp_value = 0
         var x = 0
         var y = 0
@@ -106,7 +107,7 @@ class BingoLogic(private val _listener: BingoLogicListener?)
         {
             for (j in 0 .. 4)
             {
-                _grids[COMPUTER][i][j]?.value = i * 5 + (j + 1)
+                _grids[tag][i][j]?.value = i * 5 + (j + 1)
             }
         }
 
@@ -114,13 +115,13 @@ class BingoLogic(private val _listener: BingoLogicListener?)
         {
             for (j in 0 .. 4)
             {
-                temp_value = _grids[COMPUTER][i][j]?.value ?: 0
+                temp_value = _grids[tag][i][j]?.value ?: 0
 
                 x = (Math.random() * 5).toInt()
                 y = (Math.random() * 5).toInt()
 
-                _grids[COMPUTER][i][j]?.value = _grids[COMPUTER][x][y]?.value ?: 0
-                _grids[COMPUTER][x][y]?.value = temp_value
+                _grids[tag][i][j]?.value = _grids[tag][x][y]?.value ?: 0
+                _grids[tag][x][y]?.value = temp_value
             }
         }
     }

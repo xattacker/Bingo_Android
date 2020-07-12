@@ -1,4 +1,4 @@
-package com.xattacker.android.bingo
+package com.xattacker.android.bingo.view
 
 import android.graphics.Color
 import android.os.Handler

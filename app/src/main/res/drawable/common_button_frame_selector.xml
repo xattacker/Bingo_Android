@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="true" android:state_focused="true" android:drawable="@drawable/common_button_frame_selected" /> <!-- focus state-->
+    <item android:state_enabled="true" android:state_pressed="true" android:drawable="@drawable/common_button_frame_selected" /> <!-- press state-->
+    <item android:state_enabled="false" android:drawable="@drawable/common_button_frame" /> <!-- disable state-->
+    <item android:drawable="@drawable/common_button_frame" /> <!-- default state-->
+</selector>
