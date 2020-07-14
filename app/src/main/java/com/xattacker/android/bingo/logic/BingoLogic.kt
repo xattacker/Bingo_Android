@@ -353,9 +353,10 @@ class BingoLogic(private val _listener: BingoLogicListener?)
     private fun calculateWeight(aOffsetX: Int, aOffsetY: Int): Int
     {
         var w = 0
-        _connected = 0
         var x = _locX
         var y = _locY
+        
+        _connected = 0
 
         while (x >= 0 && x < 5 && y >= 0 && y < 5)
         {
