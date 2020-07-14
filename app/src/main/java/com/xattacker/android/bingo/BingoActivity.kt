@@ -28,7 +28,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
     private lateinit var binding: ActivityMainBinding
 
     private var _status: GameStatus? = null
-    private var _count = 0 // 佈子數, 當玩家把25個數字都佈完後 開始遊戲
+    private var _numDoneCount = 0 // 佈子數, 當玩家把25個數字都佈完後 開始遊戲
     private var _logic: BingoLogic? = null
     private var _recorder: GradeRecorder? = null
 
@@ -140,10 +140,10 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
             {
                 if (grid.value <= 0)
                 {
-                    _count++
-                    grid.value = _count
+                    _numDoneCount++
+                    grid.value = _numDoneCount
 
-                    if (_count >= 25)
+                    if (_numDoneCount >= 25)
                     {
                         startPlaying()
                     }
@@ -226,7 +226,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
     private fun restart()
     {
         _status = GameStatus.PREPARE
-        _count = 0
+        _numDoneCount = 0
         updateButtonWithStatus()
 
         binding.viewAiCount.reset()
