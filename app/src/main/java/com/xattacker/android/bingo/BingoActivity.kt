@@ -51,14 +51,15 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         binding = ActivityMainBinding.inflate(this.layoutInflater)
         setContentView(binding.root)
 
-        setupGrid(binding.layoutAiGrid, false)
-        setupGrid(binding.layoutPlayerGrid, true)
-        updateRecordView()
+        setupGrid(binding.layoutAiGrid, PlayerType.COMPUTER)
+        setupGrid(binding.layoutPlayerGrid, PlayerType.PLAYER)
 
-        binding.textVersion.text = "v " + (AppProperties.appVersion ?: "")
+        updateRecordView()
 
         setupCountView(binding.viewAiCount)
         setupCountView(binding.viewPlayerCount)
+
+        binding.textVersion.text = "v " + (AppProperties.appVersion ?: "")
 
         restart()
     }
@@ -269,7 +270,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         }
     }
 
-    private fun setupGrid(aTable: TableLayout?, aClickable: Boolean)
+    private fun setupGrid(aTable: TableLayout?, type: PlayerType)
     {
         var row: TableRow?
         var grid: GridView?
@@ -291,14 +292,11 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
                 grid.locY = j
                 grid.setTextSize(TypedValue.COMPLEX_UNIT_PX, CustomProperties.getDimensionPxSize(FontType.NORMAL_FONT_SIZE, this).toFloat())
 
-                if (aClickable)
+                _logic?.addGrid(type, grid, i, j)
+
+                if (type == PlayerType.PLAYER)
                 {
-                    _logic?.addGrid(PlayerType.PLAYER, grid, i, j)
                     grid.setOnClickListener(this)
-                }
-                else
-                {
-                    _logic?.addGrid(PlayerType.COMPUTER, grid, i, j)
                 }
 
                 val para = TableRow.LayoutParams(width, width)
