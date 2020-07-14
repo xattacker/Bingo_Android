@@ -121,27 +121,27 @@ class BingoLogic(private val _listener: BingoLogicListener?)
         }
 
 
-        val offset = getOffsetValue(aDirection)
-        var x = _locX + offset[0]
-        var y = _locY + offset[1]
+        val offset = aDirection.offset()
+        var x = _locX + offset.first
+        var y = _locY + offset.second
 
         _connected = 1
 
         while (x >= 0 && x < 5 && y >= 0 && y < 5 && _grids[_turn.value()][x][y]?.isSelectedOn == true)
         {
             _connected = _connected + 1
-            x = x + offset[0]
-            y = y + offset[1]
+            x = x + offset.first
+            y = y + offset.second
         }
 
-        x = _locX - offset[0]
-        y = _locY - offset[1]
+        x = _locX - offset.first
+        y = _locY - offset.second
 
         while (x >= 0 && x < 5 && y >= 0 && y < 5 && _grids[_turn.value()][x][y]?.isSelectedOn == true)
         {
             _connected = _connected + 1
-            x = x - offset[0]
-            y = y - offset[1]
+            x = x - offset.first
+            y = y - offset.second
         }
 
 
@@ -153,18 +153,18 @@ class BingoLogic(private val _listener: BingoLogicListener?)
             while (x >= 0 && x < 5 && y >= 0 && y < 5 && _grids[_turn.value()][x][y]?.isSelectedOn == true)
             {
                 _grids[_turn.value()][x][y]?.setConnectedLine(aDirection, true)
-                x = x + offset[0]
-                y = y + offset[1]
+                x = x + offset.first
+                y = y + offset.second
             }
 
-            x = _locX - offset[0]
-            y = _locY - offset[1]
+            x = _locX - offset.first
+            y = _locY - offset.second
 
             while (x >= 0 && x < 5 && y >= 0 && y < 5 && _grids[_turn.value()][x][y]?.isSelectedOn == true)
             {
                 _grids[_turn.value()][x][y]?.setConnectedLine(aDirection, true)
-                x = x - offset[0]
-                y = y - offset[1]
+                x = x - offset.first
+                y = y - offset.second
             }
 
             _connects[_turn.value()] = _connects[_turn.value()] + 1
@@ -174,7 +174,6 @@ class BingoLogic(private val _listener: BingoLogicListener?)
             if (_connects[_turn.value()] >= 5 && !_gameOver)
             {
                 _listener?.onWon(_turn)
-
                 _gameOver = true
             }
         }
@@ -185,48 +184,10 @@ class BingoLogic(private val _listener: BingoLogicListener?)
         }
     }
 
-    private fun getOffsetValue(aDirection: ConnectedDirection): IntArray
-    {
-        val offset = IntArray(2)
-
-        when (aDirection)
-        {
-            ConnectedDirection.OBLIQUE_1 ->
-            {
-                offset[0] = 1
-                offset[1] = -1
-            }
-
-            ConnectedDirection.OBLIQUE_2 ->
-            {
-                offset[0] = 1
-                offset[1] = 1
-            }
-
-             ConnectedDirection.HORIZONTAL ->
-            {
-                offset[0] = 1
-                offset[1] = 0
-            }
-
-            ConnectedDirection.VERTICAL ->
-            {
-                offset[0] = 0
-                offset[1] = 1
-            }
-
-            else ->
-            {
-            }
-        }
-
-        return offset
-    }
-
     // after the one side done, the other side do the same value
     private fun redo(aValue: Int)
     {
-        _turn = if (_turn == PlayerType.PLAYER) PlayerType.COMPUTER else PlayerType.PLAYER
+        _turn = _turn.opposite()
 
         for (i in 0 .. 4)
         {
@@ -274,45 +235,14 @@ class BingoLogic(private val _listener: BingoLogicListener?)
     {
         _locX = aX
         _locY = aY
-        var offset_x = 0
-        var offset_y = 0
+
         var w = 0
         var dir = ConnectedDirection.OBLIQUE_1
 
         do
         {
-            when (dir)
-            {
-                ConnectedDirection.OBLIQUE_1 ->
-                {
-                    offset_x = 1
-                    offset_y = -1
-                }
-
-                ConnectedDirection.OBLIQUE_2 ->
-                {
-                    offset_x = 1
-                    offset_y = 1
-                }
-
-                ConnectedDirection.HORIZONTAL ->
-                {
-                    offset_x = 1
-                    offset_y = 0
-                }
-
-                ConnectedDirection.VERTICAL ->
-                {
-                    offset_x = 0
-                    offset_y = 1
-                }
-
-                else ->
-                {
-                }
-            }
-
-            w = w + calculateWeight(offset_x, offset_y)
+            val offset = dir.offset()
+            w = w + calculateWeight(offset.first, offset.second)
             dir = dir.next()
 
         } while (dir != ConnectedDirection.NIL)
@@ -346,7 +276,6 @@ class BingoLogic(private val _listener: BingoLogicListener?)
         }
 
         _grids[_turn.value()][x][y]?.isSelectedOn = true
-
         winCheck(_turn, x, y, true)
     }
 

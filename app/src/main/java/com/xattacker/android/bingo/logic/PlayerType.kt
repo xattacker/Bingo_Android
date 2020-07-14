@@ -10,6 +10,11 @@ enum class PlayerType constructor(private val _value: Int)
         return _value
     }
 
+    fun opposite() : PlayerType
+    {
+        return if (this == PlayerType.PLAYER) PlayerType.COMPUTER else PlayerType.PLAYER
+    }
+
     companion object
     {
         fun parse(aValue: Int): PlayerType

@@ -20,6 +20,44 @@ enum class ConnectedDirection private constructor(private val _value: Int)
         return parse(_value + 1)
     }
 
+    fun offset(): Pair<Int, Int>
+    {
+        val offset = IntArray(2)
+
+        when (this)
+        {
+            ConnectedDirection.OBLIQUE_1 ->
+            {
+                offset[0] = 1
+                offset[1] = -1
+            }
+
+            ConnectedDirection.OBLIQUE_2 ->
+            {
+                offset[0] = 1
+                offset[1] = 1
+            }
+
+            ConnectedDirection.HORIZONTAL ->
+            {
+                offset[0] = 1
+                offset[1] = 0
+            }
+
+            ConnectedDirection.VERTICAL ->
+            {
+                offset[0] = 0
+                offset[1] = 1
+            }
+
+            else ->
+            {
+            }
+        }
+
+        return Pair(offset[0], offset[1])
+    }
+
     companion object
     {
         fun parse(aValue: Int): ConnectedDirection
