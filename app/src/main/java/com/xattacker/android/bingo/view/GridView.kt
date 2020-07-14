@@ -31,7 +31,7 @@ class GridView : TextView, BingoGrid
     private var _paint: Paint? = null
 
     // for BingoGrid implementation
-    override var type: PlayerType? = null
+    override var type: PlayerType = PlayerType.PLAYER
         set(aType)
         {
             field = aType
