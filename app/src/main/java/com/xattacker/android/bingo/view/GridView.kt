@@ -133,12 +133,12 @@ class GridView : TextView, BingoGrid
     override fun initial()
     {
         _connected = false
-        _selected = _connected
+        _selected = false
 
-            for (i in _directions.indices)
-            {
-                _directions[i] = false
-            }
+        for (i in _directions.indices)
+        {
+           _directions[i] = false
+        }
 
         value = if (type == PlayerType.COMPUTER) locX * 5 + (locY + 1) else 0
     }
