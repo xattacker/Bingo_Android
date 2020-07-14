@@ -1,7 +1,7 @@
 package com.xattacker.android.bingo.logic
 
-enum class ConnectedDirection private constructor( // 直向
-    private val _value: Int)
+// 連線方向定義
+enum class ConnectedDirection private constructor(private val _value: Int)
 {
     NIL(-1), // 無方向
     OBLIQUE_1(0), // 左上向右下
