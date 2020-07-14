@@ -9,7 +9,7 @@
     <string name="AUTO_FILL_NUM">Auto Fill</string>
     <string name="GAME_START">Game Start</string>
     <string name="GAME_RESTART">Restart</string>
-    <string name="WIN_COUNT">Record: win [0], lose [1]</string>
+    <string name="WIN_COUNT">Records: win [0], lose [1]</string>
     <string name="YOU_WIN">You Win</string>
     <string name="YOU_LOSE">You Lose</string>
     
