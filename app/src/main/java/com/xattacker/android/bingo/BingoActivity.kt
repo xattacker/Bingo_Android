@@ -47,8 +47,6 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         _logic = BingoLogic(this)
         _recorder = GradeRecorder()
 
-        setContentView(R.layout.activity_main)
-
         // use view Binding mode
         binding = ActivityMainBinding.inflate(this.layoutInflater)
         setContentView(binding.root)
@@ -217,10 +215,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 
     private fun updateRecordView()
     {
-        val builder = StringBuilder()
-        builder.append(AppUtility.getString(this, R.string.WIN_COUNT, _recorder?.winCount.toString(), _recorder?.lostCount.toString()))
-
-        binding.textRecord.text = builder.toString()
+        binding.textRecord.text = AppUtility.getString(this, R.string.WIN_COUNT, _recorder?.winCount.toString(), _recorder?.lostCount.toString())
     }
 
     private fun restart()
