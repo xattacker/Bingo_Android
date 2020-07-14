@@ -28,7 +28,7 @@ class GridView : TextView, BingoGrid
             field = if (aWidth < 0) 0f else aWidth
         }
 
-    private var _paint: Paint? = null
+    private lateinit var _paint: Paint
 
     // for BingoGrid implementation
     override var type: PlayerType = PlayerType.PLAYER
@@ -43,7 +43,7 @@ class GridView : TextView, BingoGrid
 
     private var _selected: Boolean = false
     private var _connected: Boolean = false
-    private var _direction: BooleanArray? = null
+    private var _directions = BooleanArray(4)
 
     override var value: Int
         get() = id
@@ -83,43 +83,44 @@ class GridView : TextView, BingoGrid
     override fun onDraw(aCanvas: Canvas)
     {
         super.onDraw(aCanvas)
+
         val width = width
         val height = height
 
-        _paint!!.color = borderColor
-        _paint!!.strokeWidth = borderWidth
+        _paint.color = borderColor
+        _paint.strokeWidth = borderWidth
 
         when (borderAngleType)
         {
             BorderAngleType.ANGLE_ROUND ->
-                aCanvas.drawRoundRect(RectF(0f, 0f, (width - 1).toFloat(), (height - 1).toFloat()), 5f, 5f, _paint!!)
+                aCanvas.drawRoundRect(RectF(0f, 0f, (width - 1).toFloat(), (height - 1).toFloat()), 5f, 5f, _paint)
 
             BorderAngleType.ANGLE_RIGHT ->
-                aCanvas.drawRect(0f, 0f, (width - 1).toFloat(), (height - 1).toFloat(), _paint!!)
+                aCanvas.drawRect(0f, 0f, (width - 1).toFloat(), (height - 1).toFloat(), _paint)
         }
 
 
-        _paint!!.color = 0x400000FF
-        _paint!!.strokeWidth = 5f
+        _paint.color = 0x400000FF
+        _paint.strokeWidth = 5f
 
         // draw connected line
-        for (i in _direction!!.indices)
+        for (i in _directions.indices)
         {
-            if (_direction!![i])
+            if (_directions[i])
             {
                 when (ConnectedDirection.parse(i))
                 {
                     ConnectedDirection.OBLIQUE_1 ->
-                        aCanvas.drawLine(width.toFloat(), 0f, 0f, height.toFloat(), _paint!!)
+                        aCanvas.drawLine(width.toFloat(), 0f, 0f, height.toFloat(), _paint)
 
                     ConnectedDirection.OBLIQUE_2 ->
-                        aCanvas.drawLine(0f, 0f, width.toFloat(), height.toFloat(), _paint!!)
+                        aCanvas.drawLine(0f, 0f, width.toFloat(), height.toFloat(), _paint)
 
                     ConnectedDirection.HORIZONTAL ->
-                        aCanvas.drawLine((width / 2).toFloat(), 0f, (width / 2).toFloat(), height.toFloat(), _paint!!)
+                        aCanvas.drawLine((width / 2).toFloat(), 0f, (width / 2).toFloat(), height.toFloat(), _paint)
 
                     ConnectedDirection.VERTICAL ->
-                        aCanvas.drawLine(0f, (height / 2).toFloat(), width.toFloat(), (height / 2).toFloat(), _paint!!)
+                        aCanvas.drawLine(0f, (height / 2).toFloat(), width.toFloat(), (height / 2).toFloat(), _paint)
 
                     else ->
                     {
@@ -134,25 +135,22 @@ class GridView : TextView, BingoGrid
         _connected = false
         _selected = _connected
 
-        _direction?.let {
-            direction ->
-            for (i in direction.indices)
+            for (i in _directions.indices)
             {
-                direction[i] = false
+                _directions[i] = false
             }
-        }
 
         value = if (type == PlayerType.COMPUTER) locX * 5 + (locY + 1) else 0
     }
 
     override fun isLineConnected(aDirection: ConnectedDirection): Boolean
     {
-        return _direction?.get(aDirection.value()) ?: false
+        return _directions.get(aDirection.value())
     }
 
     override fun setConnectedLine(aDirection: ConnectedDirection, aConnected: Boolean)
     {
-        _direction?.let {
+        _directions.let {
             it[aDirection.value()] = aConnected
 
             if (!aConnected)
@@ -219,10 +217,9 @@ class GridView : TextView, BingoGrid
     {
         _connected = false
         _selected = _connected
-        _direction = BooleanArray(4)
 
         _paint = Paint()
-        _paint?.style = Style.STROKE
-        _paint?.isAntiAlias = true
+        _paint.style = Style.STROKE
+        _paint.isAntiAlias = true
     }
 }
