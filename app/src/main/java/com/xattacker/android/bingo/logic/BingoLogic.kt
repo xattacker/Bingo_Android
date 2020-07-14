@@ -199,8 +199,8 @@ class BingoLogic(private val _listener: BingoLogicListener?)
 
             ConnectedDirection.OBLIQUE_2 ->
             {
+                offset[0] = 1
                 offset[1] = 1
-                offset [0] = offset[1]
             }
 
              ConnectedDirection.HORIZONTAL ->
