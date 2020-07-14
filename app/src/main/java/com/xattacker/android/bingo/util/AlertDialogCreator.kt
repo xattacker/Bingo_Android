@@ -138,7 +138,7 @@ object AlertDialogCreator
     private fun createBuilder(aContext: Context): AlertDialog.Builder
     {
         val builder = AlertDialog.Builder(aContext)
-        builder.setIcon(R.drawable.app_icon)
+        builder.setIcon(R.mipmap.ic_launcher)
         builder.setInverseBackgroundForced(true)
         builder.setCancelable(false)
 
