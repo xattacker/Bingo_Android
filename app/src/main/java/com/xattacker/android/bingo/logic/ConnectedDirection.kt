@@ -7,7 +7,7 @@ enum class ConnectedDirection private constructor( // 直向
     OBLIQUE_1(0), // 左上向右下
     OBLIQUE_2(1), // 右上向左下
     HORIZONTAL(2), // 橫向
-    VERTICAL(3);
+    VERTICAL(3); // 直向
 
     fun value(): Int
     {
