@@ -165,9 +165,9 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         }
     }
 
-    override fun onLineConnected(aType: PlayerType, aCount: Int)
+    override fun onLineConnected(aTurn: PlayerType, aCount: Int)
     {
-        if (aType == PlayerType.COMPUTER)
+        if (aTurn == PlayerType.COMPUTER)
         {
             binding.viewAiCount.setCount(aCount)
         }
