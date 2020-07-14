@@ -56,9 +56,9 @@ class BingoLogic(private val _listener: BingoLogicListener?)
         return _connects[aType.value()]
     }
 
-    fun fillNumber(computer: Boolean = true)
+    fun fillNumber(type: PlayerType = PlayerType.COMPUTER)
     {
-        val tag = if (computer) PlayerType.COMPUTER.value() else PlayerType.PLAYER.value()
+        val tag = type.value()
         var temp_value = 0
         var x = 0
         var y = 0
@@ -103,7 +103,7 @@ class BingoLogic(private val _listener: BingoLogicListener?)
 
             if (!_gameOver && aRedo)
             {
-                reDo(_grids[_turn.value()][aX][aY]?.value ?: 0)
+                redo(_grids[_turn.value()][aX][aY]?.value ?: 0)
 
                 if (aType == PlayerType.PLAYER && !_gameOver)
                 {
@@ -224,7 +224,7 @@ class BingoLogic(private val _listener: BingoLogicListener?)
     }
 
     // after the one side done, the other side do the same value
-    private fun reDo(aValue: Int)
+    private fun redo(aValue: Int)
     {
         _turn = if (_turn == PlayerType.PLAYER) PlayerType.COMPUTER else PlayerType.PLAYER
 
