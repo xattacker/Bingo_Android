@@ -16,7 +16,7 @@ import android.widget.TableRow
 import android.widget.Toast
 import com.xattacker.android.bingo.databinding.ActivityMainBinding
 import com.xattacker.android.bingo.logic.BingoLogic
-import com.xattacker.android.bingo.logic.BingoLogic.PlayerType
+import com.xattacker.android.bingo.logic.PlayerType
 import com.xattacker.android.bingo.logic.BingoLogicListener
 import com.xattacker.android.bingo.util.*
 import com.xattacker.android.bingo.view.CountView

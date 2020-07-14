@@ -1,7 +1,5 @@
 package com.xattacker.android.bingo.logic
 
-import com.xattacker.android.bingo.logic.BingoLogic.PlayerType
-
 interface BingoGrid
 {
     var type: PlayerType?

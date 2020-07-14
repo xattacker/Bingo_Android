@@ -2,12 +2,6 @@ package com.xattacker.android.bingo.logic
 
 class BingoLogic(private val _listener: BingoLogicListener?)
 {
-    companion object
-    {
-        private val PLAYER = 1
-        private val COMPUTER = 0
-    }
-
     private var _locX: Int = 0
     private var _locY: Int = 0 /* 下棋位置 */
     private var _connected: Int = 0 /* 連棋數 */
@@ -21,32 +15,6 @@ class BingoLogic(private val _listener: BingoLogicListener?)
 
     private var _gameOver: Boolean = false
     private val _grids: Array<Array<Array<BingoGrid?>>>
-
-    enum class PlayerType private constructor(private val _value: Int)
-    {
-        COMPUTER(0), PLAYER(1);
-
-        fun value(): Int
-        {
-            return _value
-        }
-
-        companion object
-        {
-            fun parse(aValue: Int): PlayerType
-            {
-                for (type in PlayerType.values())
-                {
-                    if (type._value == aValue)
-                    {
-                        return type
-                    }
-                }
-
-                return PLAYER
-            }
-        }
-    }
 
     init
     {
@@ -79,16 +47,8 @@ class BingoLogic(private val _listener: BingoLogicListener?)
 
     fun addGrid(aType: PlayerType, aGrid: BingoGrid, aX: Int, aY: Int)
     {
-        var index = -1
-
-        when (aType)
-        {
-            BingoLogic.PlayerType.COMPUTER -> index = COMPUTER
-            BingoLogic.PlayerType.PLAYER -> index = PLAYER
-        }
-
-        _grids[index][aX][aY] = aGrid
-        _grids[index][aX][aY]?.type = aType
+        _grids[aType.value()][aX][aY] = aGrid
+        _grids[aType.value()][aX][aY]?.type = aType
     }
 
     fun getConnectionCount(aType: PlayerType): Int
@@ -98,7 +58,7 @@ class BingoLogic(private val _listener: BingoLogicListener?)
 
     fun fillNumber(computer: Boolean = true)
     {
-        val tag = if (computer) COMPUTER else PLAYER
+        val tag = if (computer) PlayerType.COMPUTER.value() else PlayerType.PLAYER.value()
         var temp_value = 0
         var x = 0
         var y = 0
@@ -399,7 +359,7 @@ class BingoLogic(private val _listener: BingoLogicListener?)
 
         while (x >= 0 && x < 5 && y >= 0 && y < 5)
         {
-            if (_grids[COMPUTER][x][y]?.isSelectedOn == true)
+            if (_grids[PlayerType.COMPUTER.value()][x][y]?.isSelectedOn == true)
             {
                 w = w + 1
             }
@@ -414,7 +374,7 @@ class BingoLogic(private val _listener: BingoLogicListener?)
 
         while (x >= 0 && x < 5 && y >= 0 && y < 5)
         {
-            if (_grids[COMPUTER][x][y]?.isSelectedOn == true)
+            if (_grids[PlayerType.COMPUTER.value()][x][y]?.isSelectedOn == true)
             {
                 w = w + 1
             }

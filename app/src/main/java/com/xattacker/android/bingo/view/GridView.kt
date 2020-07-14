@@ -9,7 +9,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.widget.TextView
 import com.xattacker.android.bingo.logic.BingoGrid
-import com.xattacker.android.bingo.logic.BingoLogic.PlayerType
+import com.xattacker.android.bingo.logic.PlayerType
 import com.xattacker.android.bingo.logic.ConnectedDirection
 
 class GridView : TextView, BingoGrid
