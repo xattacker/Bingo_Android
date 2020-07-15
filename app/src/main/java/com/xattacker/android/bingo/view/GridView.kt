@@ -16,7 +16,8 @@ class GridView : TextView, BingoGrid
 {
     enum class BorderAngleType
     {
-        ANGLE_ROUND, ANGLE_RIGHT
+        ANGLE_ROUND,
+        ANGLE_RIGHT
     }
 
     var borderColor = Color.BLACK
@@ -28,8 +29,6 @@ class GridView : TextView, BingoGrid
             field = if (aWidth < 0) 0f else aWidth
         }
 
-    private lateinit var _paint: Paint
-
     // for BingoGrid implementation
     override var type: PlayerType = PlayerType.PLAYER
         set(aType)
@@ -38,37 +37,33 @@ class GridView : TextView, BingoGrid
             updateBackgroundColor()
         }
 
+    override var value: Int = 0
+        set(value)
+        {
+            field = value
+            text = if (value > 0) value.toString() else ""
+            updateBackgroundColor()
+        }
+
+    override var isConnected: Boolean = false
+        set(value)
+        {
+            field = value
+            updateBackgroundColor()
+        }
+
+    override var isSelectedOn: Boolean = false
+        set(value)
+        {
+            field = value
+            updateBackgroundColor()
+        }
+
     var locX: Int = 0
     var locY: Int = 0
 
-    private var _selected: Boolean = false
-    private var _connected: Boolean = false
     private var _directions = BooleanArray(4)
-
-    override var value: Int
-        get() = id
-        set(aValue)
-        {
-            id = aValue
-            text = if (aValue > 0) aValue.toString() else ""
-            updateBackgroundColor()
-        }
-
-    override var isConnected: Boolean
-        get() = _connected
-        set(aConnected)
-        {
-            _connected = aConnected
-            updateBackgroundColor()
-        }
-
-    override var isSelectedOn: Boolean
-        get() = _selected
-        set(aValue)
-        {
-            _selected = aValue
-            updateBackgroundColor()
-        }
+    private lateinit var _paint: Paint
 
     constructor(context: Context) : super(context)
     {
@@ -132,8 +127,8 @@ class GridView : TextView, BingoGrid
 
     override fun initial()
     {
-        _connected = false
-        _selected = false
+        this.isConnected = false
+        this.isSelectedOn = false
 
         for (i in _directions.indices)
         {
@@ -150,37 +145,18 @@ class GridView : TextView, BingoGrid
 
     override fun setConnectedLine(aDirection: ConnectedDirection, aConnected: Boolean)
     {
-        _directions.let {
-            it[aDirection.value()] = aConnected
+            this._directions[aDirection.value()] = aConnected
 
             if (!aConnected)
             {
-                var dirs = it.size
-
-                for (i in it.indices)
-                {
-                    if (it[i])
-                    {
-                        break
-                    }
-                    else
-                    {
-                        dirs--
-                    }
-                }
-
-                // it means there is no any connection line in the grid,
-                // the connected state should be false
-                if (dirs == 0)
-                {
-                    _connected = false
-                }
+                this.isConnected = _directions.find {
+                                                    dir -> dir
+                                                } == true
             }
             else
             {
-                _connected = aConnected
+                this.isConnected = aConnected
             }
-        }
 
         updateBackgroundColor()
         invalidate() // repaint
@@ -190,11 +166,11 @@ class GridView : TextView, BingoGrid
     {
         setTextColor(Color.BLACK)
 
-        if (_connected)
+        if (this.isConnected)
         {
             setBackgroundColor(Color.RED)
         }
-        else if (_selected)
+        else if (this.isSelectedOn)
         {
             setBackgroundColor(Color.YELLOW)
         }
@@ -215,8 +191,8 @@ class GridView : TextView, BingoGrid
 
     private fun initView()
     {
-        _connected = false
-        _selected = _connected
+        this.isConnected = false
+        this.isSelectedOn = false
 
         _paint = Paint()
         _paint.style = Style.STROKE

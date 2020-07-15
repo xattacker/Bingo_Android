@@ -287,7 +287,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
             for (j in 0 .. 4)
             {
                 grid = GridView(this)
-                grid.id = 0
+                grid.value = 0
                 grid.gravity = Gravity.CENTER
                 grid.locX = i
                 grid.locY = j
