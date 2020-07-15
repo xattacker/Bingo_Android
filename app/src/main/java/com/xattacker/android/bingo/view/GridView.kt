@@ -105,10 +105,10 @@ class GridView : TextView, BingoGrid
             {
                 when (ConnectedDirection.parse(i))
                 {
-                    ConnectedDirection.OBLIQUE_1 ->
+                    ConnectedDirection.LEFT_TOP_RIGHT_BOTTOM ->
                         aCanvas.drawLine(width.toFloat(), 0f, 0f, height.toFloat(), _paint)
 
-                    ConnectedDirection.OBLIQUE_2 ->
+                    ConnectedDirection.RIGHT_TOP_LEFT_BOTTOM ->
                         aCanvas.drawLine(0f, 0f, width.toFloat(), height.toFloat(), _paint)
 
                     ConnectedDirection.HORIZONTAL ->

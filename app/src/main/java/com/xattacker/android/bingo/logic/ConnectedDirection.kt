@@ -5,8 +5,8 @@ enum class ConnectedDirection private constructor(private val _value: Int)
 {
     NIL(-1), // 無方向
 
-    OBLIQUE_1(0), // 左上向右下
-    OBLIQUE_2(1), // 右上向左下
+    LEFT_TOP_RIGHT_BOTTOM(0), // 左上向右下
+    RIGHT_TOP_LEFT_BOTTOM(1), // 右上向左下
     HORIZONTAL(2), // 橫向
     VERTICAL(3); // 直向
 
@@ -26,13 +26,13 @@ enum class ConnectedDirection private constructor(private val _value: Int)
 
         when (this)
         {
-            ConnectedDirection.OBLIQUE_1 ->
+            ConnectedDirection.LEFT_TOP_RIGHT_BOTTOM ->
             {
                 offset[0] = 1
                 offset[1] = -1
             }
 
-            ConnectedDirection.OBLIQUE_2 ->
+            ConnectedDirection.RIGHT_TOP_LEFT_BOTTOM ->
             {
                 offset[0] = 1
                 offset[1] = 1

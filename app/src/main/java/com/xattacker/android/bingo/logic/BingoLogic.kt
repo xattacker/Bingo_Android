@@ -99,7 +99,7 @@ class BingoLogic(private val _listener: BingoLogicListener?)
             _locX = aX
             _locY = aY
 
-            winCheck(ConnectedDirection.OBLIQUE_1)
+            winCheck(ConnectedDirection.LEFT_TOP_RIGHT_BOTTOM)
 
             if (!_gameOver && aRedo)
             {
@@ -237,7 +237,7 @@ class BingoLogic(private val _listener: BingoLogicListener?)
         _locY = aY
 
         var w = 0
-        var dir = ConnectedDirection.OBLIQUE_1
+        var dir = ConnectedDirection.LEFT_TOP_RIGHT_BOTTOM
 
         do
         {
