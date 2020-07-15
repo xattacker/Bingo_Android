@@ -157,9 +157,10 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
                     _logic?.winCheck(grid.locX, grid.locY)
                 }
             }
-
-            else ->
+            
+            GameStatus.END ->
             {
+                restart()
             }
         }
     }
