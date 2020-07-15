@@ -169,11 +169,11 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
     {
         if (aTurn == PlayerType.COMPUTER)
         {
-            binding.viewAiCount.setCount(aCount)
+            binding.viewAiCount.count = aCount
         }
         else // PLAYER
         {
-            binding.viewPlayerCount.setCount(aCount)
+            binding.viewPlayerCount.count = aCount
         }
     }
 

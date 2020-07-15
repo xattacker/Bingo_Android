@@ -10,8 +10,12 @@ import android.view.View
 
 internal class CountView(context: Context, attrs: AttributeSet) : View(context, attrs)
 {
-    private var count: Int = 0
-    private val paint: Paint
+    var count: Int = 0
+        set(value)
+        {
+            field = value
+            invalidate() // repaint
+        }
 
     var color: Int
         get() = paint.color
@@ -20,21 +24,14 @@ internal class CountView(context: Context, attrs: AttributeSet) : View(context, 
             paint.color = value
         }
 
+    private val paint: Paint
+
     init
     {
         paint = Paint()
         paint.color = Color.BLUE
         paint.style = Style.STROKE
         paint.isAntiAlias = true
-    }
-
-    fun setCount(aCount: Int)
-    {
-        if (aCount >= 0 && aCount <= 5)
-        {
-            count = aCount
-            invalidate() // repaint
-        }
     }
 
     fun addCount()
@@ -48,7 +45,7 @@ internal class CountView(context: Context, attrs: AttributeSet) : View(context, 
 
     fun reset()
     {
-        setCount(0)
+        this.count = 0
     }
 
     override fun onDraw(aCanvas: Canvas)
