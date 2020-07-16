@@ -7,8 +7,9 @@ import android.graphics.Paint
 import android.graphics.Paint.Style
 import android.util.AttributeSet
 import android.view.View
+import com.xattacker.android.bingo.R
 
-internal class CountView(context: Context, attrs: AttributeSet) : View(context, attrs)
+internal class CountView: View
 {
     var count: Int = 0
         set(value)
@@ -17,11 +18,12 @@ internal class CountView(context: Context, attrs: AttributeSet) : View(context, 
             invalidate() // repaint
         }
 
-    var color: Int
+    var lineColor: Int
         get() = paint.color
         set(value)
         {
             paint.color = value
+            invalidate() // repaint
         }
 
     private val paint: Paint
@@ -31,7 +33,17 @@ internal class CountView(context: Context, attrs: AttributeSet) : View(context, 
         paint = Paint()
         paint.color = Color.BLUE
         paint.style = Style.STROKE
+        paint.strokeCap = Paint.Cap.ROUND
         paint.isAntiAlias = true
+    }
+
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    {
+        val array = context.obtainStyledAttributes(attrs, R.styleable.CountView)
+
+        this.lineColor = array.getColor(R.styleable.CountView_lineColor, Color.BLUE)
+
+        array.recycle()
     }
 
     fun addCount()
@@ -59,27 +71,27 @@ internal class CountView(context: Context, attrs: AttributeSet) : View(context, 
 
         if (count >= 1)
         {
-            aCanvas.drawLine(offset/2, offset, width.toFloat() - (offset/2), offset, paint)
+            aCanvas.drawLine(offset, offset, width.toFloat() - offset, offset, paint)
         }
 
         if (count >= 2)
         {
-            aCanvas.drawLine((width / 2).toFloat(), offset, (width / 2).toFloat(), height.toFloat() - offset, paint)
+            aCanvas.drawLine((width/2).toFloat(), offset, (width/2).toFloat(), height.toFloat() - offset, paint)
         }
 
         if (count >= 3)
         {
-            aCanvas.drawLine((width / 2).toFloat(), (height/2).toFloat(), width.toFloat() - (offset/2), (height/2).toFloat(), paint)
+            aCanvas.drawLine((width/2).toFloat(), (height/2).toFloat(), width.toFloat() - offset, (height/2).toFloat(), paint)
         }
 
         if (count >= 4)
         {
-            aCanvas.drawLine((width / 4).toFloat(), height * 0.5f - offset, (width / 4).toFloat(), height.toFloat() - offset, paint)
+            aCanvas.drawLine((width/4).toFloat(), height * 0.5f - offset, (width/4).toFloat(), height.toFloat() - offset, paint)
         }
 
         if (count >= 5)
         {
-            aCanvas.drawLine(0f, height.toFloat() - offset, width.toFloat(), height.toFloat() - offset, paint)
+            aCanvas.drawLine(offset/2, height.toFloat() - offset, width.toFloat() - (offset/2), height.toFloat() - offset, paint)
         }
     }
 }

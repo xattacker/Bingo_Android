@@ -29,25 +29,25 @@ enum class ConnectedDirection private constructor(private val _value: Int)
             ConnectedDirection.LEFT_TOP_RIGHT_BOTTOM ->
             {
                 offset[0] = 1
-                offset[1] = -1
+                offset[1] = 1
             }
 
             ConnectedDirection.RIGHT_TOP_LEFT_BOTTOM ->
             {
                 offset[0] = 1
-                offset[1] = 1
+                offset[1] = -1
             }
 
             ConnectedDirection.HORIZONTAL ->
             {
-                offset[0] = 1
-                offset[1] = 0
+                offset[0] = 0
+                offset[1] = 1
             }
 
             ConnectedDirection.VERTICAL ->
             {
-                offset[0] = 0
-                offset[1] = 1
+                offset[0] = 1
+                offset[1] = 0
             }
 
             else ->

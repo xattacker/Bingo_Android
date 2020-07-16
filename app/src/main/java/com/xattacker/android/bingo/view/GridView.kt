@@ -106,16 +106,16 @@ class GridView : TextView, BingoGrid
                 when (ConnectedDirection.parse(i))
                 {
                     ConnectedDirection.LEFT_TOP_RIGHT_BOTTOM ->
-                        aCanvas.drawLine(width.toFloat(), 0f, 0f, height.toFloat(), _paint)
-
-                    ConnectedDirection.RIGHT_TOP_LEFT_BOTTOM ->
                         aCanvas.drawLine(0f, 0f, width.toFloat(), height.toFloat(), _paint)
 
+                    ConnectedDirection.RIGHT_TOP_LEFT_BOTTOM ->
+                        aCanvas.drawLine(width.toFloat(), 0f, 0f, height.toFloat(), _paint)
+
                     ConnectedDirection.HORIZONTAL ->
-                        aCanvas.drawLine((width / 2).toFloat(), 0f, (width / 2).toFloat(), height.toFloat(), _paint)
+                        aCanvas.drawLine(0f, (height / 2).toFloat(), width.toFloat(), (height / 2).toFloat(), _paint)
 
                     ConnectedDirection.VERTICAL ->
-                        aCanvas.drawLine(0f, (height / 2).toFloat(), width.toFloat(), (height / 2).toFloat(), _paint)
+                        aCanvas.drawLine((width / 2).toFloat(), 0f, (width / 2).toFloat(), height.toFloat(), _paint)
 
                     else ->
                     {

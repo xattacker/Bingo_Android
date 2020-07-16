@@ -10,6 +10,7 @@
     <color name="DARK_GRAY">#FF444444</color>
     <color name="BLACK">#FF000000</color>
 
-     <color name="COMPUTER">#FF470000</color>
-     <color name="PLAYER">#FF004040</color>
+    <color name="COUNT_COLOR">#FF00bfff</color>
+    <color name="COMPUTER">#FF470000</color>
+    <color name="PLAYER">#FF004040</color>
 </resources>
