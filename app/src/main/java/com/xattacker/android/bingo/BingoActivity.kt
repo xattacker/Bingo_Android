@@ -288,10 +288,8 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
             {
                 grid = GridView(this)
                 grid.value = 0
-                grid.gravity = Gravity.CENTER
                 grid.locX = i
                 grid.locY = j
-                grid.setTextSize(TypedValue.COMPLEX_UNIT_PX, CustomProperties.getDimensionPxSize(FontType.NORMAL_FONT_SIZE, this).toFloat())
 
                 _logic?.addGrid(type, grid, i, j)
 
