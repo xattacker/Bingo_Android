@@ -86,7 +86,7 @@ internal class CountView: View
 
         if (count >= 4)
         {
-            aCanvas.drawLine((width/4).toFloat(), height * 0.5f - offset, (width/4).toFloat(), height.toFloat() - offset, paint)
+            aCanvas.drawLine((width/4).toFloat(), height * 0.5f -( offset/2), (width/4).toFloat(), height.toFloat() - offset, paint)
         }
 
         if (count >= 5)

@@ -9,7 +9,7 @@ object AppUtility
     {
         var str = aContext.getString(aResId)
 
-        if (aParameters != null && aParameters.size > 0)
+        if (aParameters.size > 0)
         {
             var index = -1
             var replaced: String? = null
@@ -17,10 +17,11 @@ object AppUtility
             val builder = StringBuilder(str)
             var i = 0
             val size = aParameters.size
+
             while (i < size)
             {
                 para = aParameters[i]
-                if (para != null)
+                if (para.length > 0)
                 {
                     replaced = "[$i]"
 
@@ -30,6 +31,7 @@ object AppUtility
                         builder.replace(index, index + replaced.length, para)
                     }
                 }
+
                 i++
             }
 
@@ -51,6 +53,7 @@ object AppUtility
             val builder = StringBuilder(str)
             var i = 0
             val size = aResParameters.size
+
             while (i < size)
             {
                 res = aResParameters[i]
@@ -64,6 +67,7 @@ object AppUtility
                         builder.replace(index, index + replaced.length, aContext.getString(res))
                     }
                 }
+
                 i++
             }
 
@@ -76,7 +80,6 @@ object AppUtility
     fun getString(aContext: Context, aResId: Int, aParameters: ArrayList<String>): String
     {
         val array = aParameters.toTypedArray()
-
         return getString(aContext, aResId, *array)
     }
-} // in order to hide constructor
+}

@@ -8,13 +8,14 @@ import java.util.Hashtable
 object CustomProperties
 {
     private val FONT_SIZE = Hashtable<FontType, Int>()
+
     fun getDimensionPxSize(aType: FontType, aContext: Context): Int
     {
         var size = 0
 
         if (FONT_SIZE.contains(aType))
         {
-            size = FONT_SIZE[aType]!!
+            size = FONT_SIZE[aType] ?: 0
         }
         else
         // not found, create new one
@@ -45,7 +46,7 @@ object CustomProperties
         val display = AppProperties.screenDisplay
         if (display != null)
         {
-            width = (display!!.getWidth() * aRatio).toInt()
+            width = (display.getWidth() * aRatio).toInt()
         }
 
         return width
@@ -57,7 +58,7 @@ object CustomProperties
         val display = AppProperties.screenDisplay
         if (display != null)
         {
-            height = (display!!.getHeight() * aRatio).toInt()
+            height = (display.getHeight() * aRatio).toInt()
         }
 
         return height
