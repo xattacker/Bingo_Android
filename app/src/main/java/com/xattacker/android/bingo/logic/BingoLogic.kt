@@ -48,7 +48,6 @@ class BingoLogic(private val _listener: BingoLogicListener?)
     fun addGrid(aType: PlayerType, aGrid: BingoGrid, aX: Int, aY: Int)
     {
         _grids[aType.value()][aX][aY] = aGrid
-        _grids[aType.value()][aX][aY]?.type = aType
     }
 
     fun getConnectionCount(aType: PlayerType): Int
