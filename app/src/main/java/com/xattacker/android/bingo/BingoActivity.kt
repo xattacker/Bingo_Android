@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
@@ -21,7 +20,7 @@ import com.xattacker.android.bingo.logic.BingoLogicListener
 import com.xattacker.android.bingo.util.*
 import com.xattacker.android.bingo.view.CountView
 import com.xattacker.android.bingo.view.GridView
-import com.xattacker.android.bingo.view.LastViewRemover
+import com.xattacker.android.bingo.view.BlinkViewAnimator
 
 class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 {
@@ -77,21 +76,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         val handler = Handler()
         handler.postDelayed({
             Toast.makeText(this@BingoActivity, R.string.FILL_NUMBER, Toast.LENGTH_LONG).show()
-
-            val ani = TranslateAnimation(
-                            Animation.RELATIVE_TO_PARENT,
-                            0f,
-                            Animation.RELATIVE_TO_PARENT,
-                            0f,
-                            Animation.RELATIVE_TO_PARENT,
-                            0f,
-                            Animation.RELATIVE_TO_PARENT,
-                            0f)
-            ani.duration = 300
-            ani.interpolator = AccelerateInterpolator()
-            ani.setAnimationListener(LastViewRemover(binding.layoutPlayerGrid))
-
-            binding.layoutPlayerGrid.startAnimation(ani)
+            showHintAnimation()
         },
         500)
     }
@@ -212,7 +197,6 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
     fun onRestartClick(view: View)
     {
         restart()
-        showAnimation()
     }
 
     private fun updateRecordView()
@@ -312,34 +296,21 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         countView.layoutParams.width = CustomProperties.getScreenWidth(0.1f)
     }
 
-    private fun showAnimation()
+    private fun showHintAnimation()
     {
-        setLayoutAnimation(binding.layoutAiGrid, 0, -1)
-        setLayoutAnimation(binding.layoutPlayerGrid, 0, 1)
-    }
+        val ani = TranslateAnimation(
+                        Animation.RELATIVE_TO_PARENT,
+                        0f,
+                        Animation.RELATIVE_TO_PARENT,
+                        0f,
+                        Animation.RELATIVE_TO_PARENT,
+                        0f,
+                        Animation.RELATIVE_TO_PARENT,
+                        0f)
+        ani.duration = 300
+        ani.interpolator = AccelerateInterpolator()
+        ani.setAnimationListener(BlinkViewAnimator(binding.layoutPlayerGrid))
 
-    private fun setLayoutAnimation(aGroup: ViewGroup?, aXValue: Int, aYValue: Int)
-    {
-        if (aGroup != null)
-        {
-            val set = AnimationSet(true)
-            var animation: Animation = AlphaAnimation(0f, 1f)
-            animation.duration = 500
-            set.addAnimation(animation)
-
-            animation = TranslateAnimation(Animation.RELATIVE_TO_SELF,
-                                aXValue.toFloat(),
-                                Animation.RELATIVE_TO_SELF,
-                                0f,
-                                Animation.RELATIVE_TO_SELF,
-                                aYValue.toFloat(),
-                                Animation.RELATIVE_TO_SELF,
-                                0f)
-            animation.setDuration(500)
-            set.addAnimation(animation)
-
-            val ctrl = LayoutAnimationController(set, 0.25f)
-            aGroup.layoutAnimation = ctrl
-        }
+        binding.layoutPlayerGrid.startAnimation(ani)
     }
 }
