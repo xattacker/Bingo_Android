@@ -191,6 +191,9 @@ class GridView : TextView, BingoGrid
 
     private fun initView()
     {
+        this.gravity = Gravity.CENTER
+        this.setTextSize(TypedValue.COMPLEX_UNIT_PX, CustomProperties.getDimensionPxSize(FontType.NORMAL_FONT_SIZE, context).toFloat())
+        
         this.isConnected = false
         this.isSelectedOn = false
 
