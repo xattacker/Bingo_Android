@@ -7,7 +7,11 @@ import android.graphics.Paint
 import android.graphics.Paint.Style
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.TypedValue
+import android.view.Gravity
 import android.widget.TextView
+import com.xattacker.android.bingo.CustomProperties
+import com.xattacker.android.bingo.FontType
 import com.xattacker.android.bingo.logic.BingoGrid
 import com.xattacker.android.bingo.logic.PlayerType
 import com.xattacker.android.bingo.logic.ConnectedDirection
