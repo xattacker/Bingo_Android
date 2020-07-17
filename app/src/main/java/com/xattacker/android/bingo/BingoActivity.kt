@@ -290,6 +290,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
                 grid.value = 0
                 grid.locX = i
                 grid.locY = j
+                grid.type = type
 
                 _logic?.addGrid(type, grid, i, j)
 
@@ -307,7 +308,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 
     private fun setupCountView(countView: CountView)
     {
-        countView.layoutParams.height =  CustomProperties.getScreenWidth(0.1f)
+        countView.layoutParams.height = CustomProperties.getScreenWidth(0.1f)
         countView.layoutParams.width = CustomProperties.getScreenWidth(0.1f)
     }
 
