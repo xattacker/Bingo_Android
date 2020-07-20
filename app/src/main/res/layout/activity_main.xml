@@ -48,7 +48,7 @@
 								android:id="@+id/view_ai_count"
 								android:layout_width="match_parent"
 								android:layout_height="wrap_content"
-						    	app:lineColor="@color/COUNT_COLOR"/>
+						    	app:countColor="@color/COUNT_COLOR"/>
 				    </LinearLayout>
     		</RelativeLayout>
     
@@ -83,10 +83,10 @@
 							    android:layout_marginBottom="6dp"/>
 
 					   <com.xattacker.android.bingo.view.CountView
-						   android:id="@+id/view_player_count"
-						   android:layout_width="match_parent"
-						   android:layout_height="wrap_content"
-						   app:lineColor="@color/COUNT_COLOR"/>
+							   android:id="@+id/view_player_count"
+							   android:layout_width="match_parent"
+							   android:layout_height="wrap_content"
+							   app:countColor="@color/COUNT_COLOR"/>
 				    </LinearLayout>
     		</RelativeLayout>
 

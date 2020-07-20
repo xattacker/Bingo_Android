@@ -18,7 +18,7 @@ internal class CountView: View
             invalidate() // repaint
         }
 
-    var lineColor: Int
+    var countColor: Int
         get() = paint.color
         set(value)
         {
@@ -26,22 +26,19 @@ internal class CountView: View
             invalidate() // repaint
         }
 
-    private val paint: Paint
+    private var paint: Paint
 
-    init
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     {
         paint = Paint()
         paint.color = Color.BLUE
         paint.style = Style.STROKE
         paint.strokeCap = Paint.Cap.ROUND
         paint.isAntiAlias = true
-    }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-    {
         val array = context.obtainStyledAttributes(attrs, R.styleable.CountView)
 
-        this.lineColor = array.getColor(R.styleable.CountView_lineColor, Color.BLUE)
+        this.countColor = array.getColor(R.styleable.CountView_countColor, Color.BLUE)
 
         array.recycle()
     }

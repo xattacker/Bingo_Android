@@ -139,7 +139,7 @@ class GridView : TextView, BingoGrid
            _directions[i] = false
         }
 
-        value = if (type == PlayerType.COMPUTER) locX * 5 + (locY + 1) else 0
+        this.value = 0
     }
 
     override fun isLineConnected(aDirection: ConnectedDirection): Boolean
