@@ -9,7 +9,7 @@
     <string name="AUTO_FILL_NUM">Auto Fill</string>
     <string name="GAME_START">Game Start</string>
     <string name="GAME_RESTART">Restart</string>
-    <string name="WIN_COUNT">Records: win [0], lose [1]</string>
+    <string name="WIN_COUNT">Records: win %d, lose %d</string>
     <string name="YOU_WIN">You Win</string>
     <string name="YOU_LOSE">You Lose</string>
     
@@ -27,7 +27,7 @@
     <string name="CONFIRM_QUIT">Determined to Quit？</string>
     <string name="CONFIRM_EXIT">Determined to Exit？</string>
     <string name="CONFIRM_DELETE">Determined to Delete？</string>
-    <string name="CONFIRM_DELETE_ITEM">Determined to Delete [0]？</string>
+    <string name="CONFIRM_DELETE_ITEM">Determined to Delete %s？</string>
     <string name="CONFIRM_REMOVE">Determined to Remove？</string>
-    <string name="CONFIRM_REMOVE_ITEM">Determined to Remove [0]？</string>
+    <string name="CONFIRM_REMOVE_ITEM">Determined to Remove %s？</string>
 </resources>

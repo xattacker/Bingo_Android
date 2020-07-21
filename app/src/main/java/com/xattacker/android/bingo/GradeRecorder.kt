@@ -5,13 +5,13 @@ class GradeRecorder
     var winCount: Int = 0
         private set
 
-    var lostCount: Int = 0
+    var loseCount: Int = 0
         private set
 
     init
     {
-        lostCount = 0
-        winCount = lostCount
+        loseCount = 0
+        winCount = loseCount
     }
 
     fun addWinCount()
@@ -21,6 +21,12 @@ class GradeRecorder
 
     fun addLoseCount()
     {
-        lostCount++
+        loseCount++
+    }
+
+    fun reset()
+    {
+        winCount = 0
+        loseCount = 0
     }
 }

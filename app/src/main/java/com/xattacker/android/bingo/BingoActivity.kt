@@ -24,12 +24,10 @@ import com.xattacker.android.bingo.view.BlinkViewAnimator
 
 class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 {
-    private lateinit var binding: ActivityMainBinding
-
-    private var _status: GameStatus? = null
-    private var _numDoneCount = 0 // 佈子數, 當玩家把25個數字都佈完後 開始遊戲
-    private var _logic: BingoLogic? = null
-    private var _recorder: GradeRecorder? = null
+    companion object
+    {
+        private val GRID_DIMENSION = 5
+    }
 
     private enum class GameStatus
     {
@@ -38,13 +36,19 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         END
     }
 
+    private lateinit var binding: ActivityMainBinding
+
+    private var _status: GameStatus? = null
+    private var _numDoneCount = 0 // 佈子數, 當玩家把25個數字都佈完後 開始遊戲
+    private var _logic: BingoLogic? = null
+    private val _recorder = GradeRecorder()
+
     public override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
 
         AppProperties.initial(this)
-        _logic = BingoLogic(this)
-        _recorder = GradeRecorder()
+        _logic = BingoLogic(this, GRID_DIMENSION)
 
         // use view Binding mode
         binding = ActivityMainBinding.inflate(this.layoutInflater)
@@ -127,7 +131,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
                     _numDoneCount++
                     grid.value = _numDoneCount
 
-                    if (_numDoneCount >= 25)
+                    if (_numDoneCount >= Math.pow(GRID_DIMENSION.toDouble(), 2.0))
                     {
                         startPlaying()
                     }
@@ -171,12 +175,12 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 
         if (aWinner == PlayerType.COMPUTER)
         {
-            _recorder?.addLoseCount()
+            _recorder.addLoseCount()
             res = R.string.YOU_LOSE
         }
         else // PLAYER
         {
-            _recorder?.addWinCount()
+            _recorder.addWinCount()
             res = R.string.YOU_WIN
         }
 
@@ -201,7 +205,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 
     private fun updateRecordView()
     {
-        binding.textRecord.text = AppUtility.getString(this, R.string.WIN_COUNT, _recorder?.winCount.toString(), _recorder?.lostCount.toString())
+        binding.textRecord.text = getString(R.string.WIN_COUNT, _recorder.winCount, _recorder.loseCount)
     }
 
     private fun restart()
@@ -262,13 +266,13 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         val width = CustomProperties.getScreenWidth(0.125f)
         val padding = (1.8 * AppProperties.density).toInt()
 
-        for (i in 0 .. 4)
+        for (i in 0 .. GRID_DIMENSION - 1)
         {
             row = TableRow(this)
             row.gravity = Gravity.CENTER
             aTable?.addView(row)
 
-            for (j in 0 .. 4)
+            for (j in 0 .. GRID_DIMENSION - 1)
             {
                 grid = GridView(this)
                 grid.value = 0

@@ -9,7 +9,7 @@
     <string name="AUTO_FILL_NUM">自動填數</string>
     <string name="GAME_START">遊戲開始</string>
     <string name="GAME_RESTART">重新開始</string>
-    <string name="WIN_COUNT">累計: [0]勝 [1]負</string>
+    <string name="WIN_COUNT">累計: %d勝 %d負</string>
     <string name="YOU_WIN">你贏了</string>
     <string name="YOU_LOSE">你輸了</string>
 
@@ -27,7 +27,7 @@
     <string name="CONFIRM_QUIT">確認退出?</string>
     <string name="CONFIRM_EXIT">確認離開?</string>
     <string name="CONFIRM_DELETE">確認刪除?</string>
-    <string name="CONFIRM_DELETE_ITEM">確認刪除[0]?</string>
+    <string name="CONFIRM_DELETE_ITEM">確認刪除%s?</string>
     <string name="CONFIRM_REMOVE">確認移除?</string>
-    <string name="CONFIRM_REMOVE_ITEM">確認移除[0]?</string>
+    <string name="CONFIRM_REMOVE_ITEM">確認移除%s?</string>
 </resources>
