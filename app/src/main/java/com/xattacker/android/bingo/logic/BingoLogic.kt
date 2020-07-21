@@ -272,8 +272,8 @@ class BingoLogic
 
         if (_grids[_turn.value()].grids[center][center]?.isSelectedOn == false) // the first priority is center
         {
-            y = 2
-            x = y
+            x = center
+            y = center
         }
         else
         {
