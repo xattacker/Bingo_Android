@@ -131,7 +131,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
                     _numDoneCount++
                     grid.value = _numDoneCount
 
-                    if (_numDoneCount >= Math.pow(GRID_DIMENSION.toDouble(), 2.0))
+                    if (_numDoneCount >= Math.pow(GRID_DIMENSION.toDouble(), 2.0).toInt())
                     {
                         startPlaying()
                     }

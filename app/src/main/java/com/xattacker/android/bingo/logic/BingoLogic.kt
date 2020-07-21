@@ -1,25 +1,38 @@
 package com.xattacker.android.bingo.logic
 
-class BingoLogic(private val listener: BingoLogicListener?, private val dimension: Int)
+import java.lang.ref.WeakReference
+
+class BingoLogic
 {
+    inner class GridHolder
+    {
+        var connection: Int = 0 /* 連棋數 */
+        lateinit var grids: Array<Array<BingoGrid?>>
+    }
+
     private var _locX: Int = 0
     private var _locY: Int = 0 /* 下棋位置 */
     private var _connected: Int = 0 /* 連棋數 */
-    private val _connects: IntArray // 雙方連線數
-    private val _weight: IntArray // 權重
+    private val _weight: IntArray = IntArray(3) // 權重
 
     private var _turn: PlayerType = PlayerType.PLAYER
-
     private var _gameOver: Boolean = false
-    private val _grids: Array<Array<Array<BingoGrid?>>>
+    private val _grids: Array<GridHolder>
+    private var listener: WeakReference<BingoLogicListener>? = null
+    private var dimension: Int = 0
 
-    init
+    constructor(listener: BingoLogicListener, dimension: Int)
     {
-        _connects = IntArray(2)
-        _weight = IntArray(3)
-        _connected = 0
-        _gameOver = false
-        _grids = Array(2) {Array(this.dimension) {arrayOfNulls<BingoGrid>(this.dimension)}}
+        this.listener = WeakReference(listener)
+        this.dimension = dimension
+
+        val grid1 = GridHolder()
+        grid1.grids = Array(this.dimension) {arrayOfNulls<BingoGrid>(this.dimension)}
+
+        val grid2 = GridHolder()
+        grid2.grids = Array(this.dimension) {arrayOfNulls<BingoGrid>(this.dimension)}
+
+        _grids = arrayOf(grid1, grid2)
     }
 
     fun restart()
@@ -30,13 +43,13 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
 
         for (i in 0 .. 1)
         {
-            _connects[i] = 0
+            _grids[i].connection = 0
 
             for (j in 0 .. this.dimension - 1)
             {
                 for (k in 0 .. this.dimension - 1)
                 {
-                    _grids[i][j][k]?.initial()
+                    _grids[i].grids[j][k]?.initial()
                 }
             }
         }
@@ -44,12 +57,12 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
 
     fun addGrid(aType: PlayerType, aGrid: BingoGrid, aX: Int, aY: Int)
     {
-        _grids[aType.value()][aX][aY] = aGrid
+        _grids[aType.value()].grids[aX][aY] = aGrid
     }
 
     fun getConnectionCount(aType: PlayerType): Int
     {
-        return _connects[aType.value()]
+        return _grids[aType.value()].connection
     }
 
     fun fillNumber(type: PlayerType = PlayerType.COMPUTER)
@@ -63,7 +76,7 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
         {
             for (j in 0 .. this.dimension - 1)
             {
-                _grids[tag][i][j]?.value = (i * this.dimension) + (j + 1)
+                _grids[tag].grids[i][j]?.value = (i * this.dimension) + (j + 1)
             }
         }
 
@@ -71,13 +84,13 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
         {
             for (j in 0 .. this.dimension - 1)
             {
-                temp_value = _grids[tag][i][j]?.value ?: 0
+                temp_value = _grids[tag].grids[i][j]?.value ?: 0
 
                 x = (Math.random() * this.dimension).toInt()
                 y = (Math.random() * this.dimension).toInt()
 
-                _grids[tag][i][j]?.value = _grids[tag][x][y]?.value ?: 0
-                _grids[tag][x][y]?.value = temp_value
+                _grids[tag].grids[i][j]?.value = _grids[tag].grids[x][y]?.value ?: 0
+                _grids[tag].grids[x][y]?.value = temp_value
             }
         }
     }
@@ -99,7 +112,7 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
 
             if (!_gameOver && aRedo)
             {
-                redo(_grids[_turn.value()][aX][aY]?.value ?: 0)
+                redo(_grids[_turn.value()].grids[aX][aY]?.value ?: 0)
 
                 if (aType == PlayerType.PLAYER && !_gameOver)
                 {
@@ -123,7 +136,7 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
 
         _connected = 1
 
-        while (x >= 0 && x < this.dimension && y >= 0 && y < this.dimension && _grids[_turn.value()][x][y]?.isSelectedOn == true)
+        while (x >= 0 && x < this.dimension && y >= 0 && y < this.dimension && _grids[_turn.value()].grids[x][y]?.isSelectedOn == true)
         {
             _connected = _connected + 1
             x = x + offset.first
@@ -133,7 +146,7 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
         x = _locX - offset.first
         y = _locY - offset.second
 
-        while (x >= 0 && x < this.dimension && y >= 0 && y < this.dimension && _grids[_turn.value()][x][y]?.isSelectedOn == true)
+        while (x >= 0 && x < this.dimension && y >= 0 && y < this.dimension && _grids[_turn.value()].grids[x][y]?.isSelectedOn == true)
         {
             _connected = _connected + 1
             x = x - offset.first
@@ -146,9 +159,9 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
             x = _locX
             y = _locY
 
-            while (x >= 0 && x < this.dimension && y >= 0 && y < this.dimension && _grids[_turn.value()][x][y]?.isSelectedOn == true)
+            while (x >= 0 && x < this.dimension && y >= 0 && y < this.dimension && _grids[_turn.value()].grids[x][y]?.isSelectedOn == true)
             {
-                _grids[_turn.value()][x][y]?.setConnectedLine(aDirection, true)
+                _grids[_turn.value()].grids[x][y]?.setConnectedLine(aDirection, true)
                 x = x + offset.first
                 y = y + offset.second
             }
@@ -156,20 +169,20 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
             x = _locX - offset.first
             y = _locY - offset.second
 
-            while (x >= 0 && x < this.dimension && y >= 0 && y < this.dimension && _grids[_turn.value()][x][y]?.isSelectedOn == true)
+            while (x >= 0 && x < this.dimension && y >= 0 && y < this.dimension && _grids[_turn.value()].grids[x][y]?.isSelectedOn == true)
             {
-                _grids[_turn.value()][x][y]?.setConnectedLine(aDirection, true)
+                _grids[_turn.value()].grids[x][y]?.setConnectedLine(aDirection, true)
                 x = x - offset.first
                 y = y - offset.second
             }
 
-            _connects[_turn.value()] = _connects[_turn.value()] + 1
+            _grids[_turn.value()].connection += 1
 
-            listener?.onLineConnected(_turn, _connects[_turn.value()])
+            listener?.get()?.onLineConnected(_turn, _grids[_turn.value()].connection)
 
-            if (_connects[_turn.value()] >= this.dimension && !_gameOver)
+            if (_grids[_turn.value()].connection >= this.dimension && !_gameOver)
             {
-                listener?.onWon(_turn)
+                listener?.get()?.onWon(_turn)
                 _gameOver = true
             }
         }
@@ -189,9 +202,9 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
         {
             for (j in 0 .. this.dimension - 1)
             {
-                if (_grids[_turn.value()][i][j]?.value == aValue)
+                if (_grids[_turn.value()].grids[i][j]?.value == aValue)
                 {
-                    _grids[_turn.value()][i][j]?.isSelectedOn = true
+                    _grids[_turn.value()].grids[i][j]?.isSelectedOn = true
                     winCheck(_turn, i, j, false)
 
                     break
@@ -208,7 +221,7 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
         {
             for (j in 0 .. this.dimension - 1)
             {
-                if (_grids[_turn.value()][i][j]?.isSelectedOn == false)
+                if (_grids[_turn.value()].grids[i][j]?.isSelectedOn == false)
                 {
                     runAI2(i, j)
                 }
@@ -218,7 +231,7 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
         if (_weight[2] > 1)
         {
             _weight[2] = 0
-            _grids[_turn.value()][_weight[0]][_weight[1]]?.isSelectedOn = true
+            _grids[_turn.value()].grids[_weight[0]][_weight[1]]?.isSelectedOn = true
             winCheck(_turn, _weight[0], _weight[1], true)
         }
         else
@@ -255,8 +268,9 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
     {
         var x = 0
         var y = 0
+        val center = this.dimension / 2
 
-        if (_grids[_turn.value()][2][2]?.isSelectedOn == false) // the first priority is center
+        if (_grids[_turn.value()].grids[center][center]?.isSelectedOn == false) // the first priority is center
         {
             y = 2
             x = y
@@ -268,10 +282,10 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
                 x = (Math.random() * this.dimension).toInt()
                 y = (Math.random() * this.dimension).toInt()
 
-            } while (_grids[_turn.value()][x][y]?.isSelectedOn == true)
+            } while (_grids[_turn.value()].grids[x][y]?.isSelectedOn == true)
         }
 
-        _grids[_turn.value()][x][y]?.isSelectedOn = true
+        _grids[_turn.value()].grids[x][y]?.isSelectedOn = true
         winCheck(_turn, x, y, true)
     }
 
@@ -285,7 +299,7 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
 
         while (x >= 0 && x < this.dimension && y >= 0 && y < this.dimension)
         {
-            if (_grids[PlayerType.COMPUTER.value()][x][y]?.isSelectedOn == true)
+            if (_grids[PlayerType.COMPUTER.value()].grids[x][y]?.isSelectedOn == true)
             {
                 w = w + 1
             }
@@ -300,7 +314,7 @@ class BingoLogic(private val listener: BingoLogicListener?, private val dimensio
 
         while (x >= 0 && x < this.dimension && y >= 0 && y < this.dimension)
         {
-            if (_grids[PlayerType.COMPUTER.value()][x][y]?.isSelectedOn == true)
+            if (_grids[PlayerType.COMPUTER.value()].grids[x][y]?.isSelectedOn == true)
             {
                 w = w + 1
             }
