@@ -1,6 +1,7 @@
 package com.xattacker.android.bingo
 
 import android.content.Context
+import android.util.DisplayMetrics
 import android.view.Display
 import com.xattacker.android.bingo.util.AppProperties
 import java.util.Hashtable
@@ -17,8 +18,7 @@ object CustomProperties
         {
             size = FONT_SIZE[aType] ?: 0
         }
-        else
-        // not found, create new one
+        else // not found, create new one
         {
             var res = 0
 
@@ -46,7 +46,9 @@ object CustomProperties
         val display = AppProperties.screenDisplay
         if (display != null)
         {
-            width = (display.getWidth() * aRatio).toInt()
+            val dm = DisplayMetrics()
+            display.getMetrics(dm)
+            width = (dm.widthPixels.toFloat() * aRatio).toInt()
         }
 
         return width
@@ -58,7 +60,9 @@ object CustomProperties
         val display = AppProperties.screenDisplay
         if (display != null)
         {
-            height = (display.getHeight() * aRatio).toInt()
+            val dm = DisplayMetrics()
+            display.getMetrics(dm)
+            height = (dm.heightPixels.toFloat() * aRatio).toInt()
         }
 
         return height

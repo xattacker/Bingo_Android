@@ -35,8 +35,7 @@ object AppProperties
 
             if (_activity != null)
             {
-                val manager = _activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-                display = manager.defaultDisplay
+                display = _activity?.windowManager?.defaultDisplay
             }
 
             return display
