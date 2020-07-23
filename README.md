@@ -1,4 +1,4 @@
-# a Bingo Android game app project. 
+# Bingo Android game app project. 
 
 link on google play: 
 <https://play.google.com/store/apps/details?id=com.xattacker.android.bingo&hl=zh_TW>
