@@ -29,12 +29,6 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         private val GRID_DIMENSION = 5
     }
 
-    private enum class GameStatus
-    {
-        PREPARE,
-        PLAYING,
-        END
-    }
 
     private lateinit var binding: ActivityMainBinding
 
@@ -131,7 +125,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
                     _numDoneCount++
                     grid.value = _numDoneCount
 
-                    if (_numDoneCount >= Math.pow(GRID_DIMENSION.toDouble(), 2.0).toInt())
+                    if (_numDoneCount >= this._logic?.maxGridValue ?: 0)
                     {
                         startPlaying()
                     }

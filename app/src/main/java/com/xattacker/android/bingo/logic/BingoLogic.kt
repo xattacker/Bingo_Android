@@ -1,5 +1,6 @@
 package com.xattacker.android.bingo.logic
 
+import com.xattacker.android.bingo.BingoActivity
 import java.lang.ref.WeakReference
 
 class BingoLogic
@@ -9,6 +10,9 @@ class BingoLogic
         var connection: Int = 0 /* 連棋數 */
         lateinit var grids: Array<Array<BingoGrid?>>
     }
+
+    val maxGridValue: Int
+        get() = Math.pow(dimension.toDouble(), 2.0).toInt()
 
     private var _locX: Int = 0
     private var _locY: Int = 0 /* 下棋位置 */
