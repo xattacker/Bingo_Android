@@ -5,8 +5,8 @@ apply plugin: 'com.github.triplet.play'
 android {
     compileSdkVersion 28
 
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding = true
     }
 
     defaultConfig {
