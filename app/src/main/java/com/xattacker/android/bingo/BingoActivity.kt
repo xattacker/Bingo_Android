@@ -8,7 +8,6 @@ import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.View.OnClickListener
-import android.view.ViewGroup
 import android.view.animation.*
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -31,18 +30,15 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 
 
     private lateinit var binding: ActivityMainBinding
-
-    private var _status: GameStatus? = null
-    private var _numDoneCount = 0 // 佈子數, 當玩家把25個數字都佈完後 開始遊戲
-    private var _logic: BingoLogic? = null
-    private val _recorder = GradeRecorder()
+    private var viewModel: BingoViewModel? = null
 
     public override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
 
         AppProperties.initial(this)
-        _logic = BingoLogic(this, GRID_DIMENSION)
+
+        this.initViewModel()
 
         // use view Binding mode
         binding = ActivityMainBinding.inflate(this.layoutInflater)
@@ -57,8 +53,6 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         setupCountView(binding.viewPlayerCount)
 
         binding.textVersion.text = "v " + (AppProperties.appVersion ?: "")
-
-        restart()
     }
 
     override fun onStart()
@@ -70,6 +64,8 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
     override fun onPostCreate(savedInstanceState: Bundle?)
     {
         super.onPostCreate(savedInstanceState)
+
+        viewModel?.restart()
 
         val handler = Handler()
         handler.postDelayed({
@@ -83,7 +79,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
     {
         super.onDestroy()
 
-        _logic = null
+        viewModel = null
         AppProperties.release()
     }
 
@@ -116,36 +112,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
     {
         val grid = aView as GridView
 
-        when (_status)
-        {
-            GameStatus.PREPARE ->
-            {
-                if (grid.value <= 0)
-                {
-                    _numDoneCount++
-                    grid.value = _numDoneCount
-
-                    if (_numDoneCount >= this._logic?.maxGridValue ?: 0)
-                    {
-                        startPlaying()
-                    }
-                }
-            }
-
-            GameStatus.PLAYING ->
-            {
-                if (!grid.isSelectedOn)
-                {
-                    grid.isSelectedOn = true
-                    _logic?.winCheck(grid.locX, grid.locY)
-                }
-            }
-            
-            GameStatus.END ->
-            {
-                restart()
-            }
-        }
+        viewModel?.handleGridClick(grid, grid.locX, grid.locY)
     }
 
     override fun onLineConnected(aTurn: PlayerType, aCount: Int)
@@ -162,72 +129,60 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 
     override fun onWon(aWinner: PlayerType)
     {
-        var res = -1
-
-        _status = GameStatus.END
-        updateButtonWithStatus()
-
-        if (aWinner == PlayerType.COMPUTER)
-        {
-            _recorder.addLoseCount()
-            res = R.string.YOU_LOSE
-        }
-        else // PLAYER
-        {
-            _recorder.addWinCount()
-            res = R.string.YOU_WIN
-        }
-
         updateRecordView()
 
         AlertDialogCreator.showDialog(
             AlertTitleType.Notification,
-            getString(res),
+            getString(if (aWinner == PlayerType.COMPUTER) R.string.YOU_LOSE else R.string.YOU_WIN),
             this)
     }
 
     fun onAutoFillNumClick(view: View)
     {
-        _logic?.fillNumber(PlayerType.PLAYER)
-        startPlaying()
+        viewModel?.fillNumber(PlayerType.PLAYER)
+        viewModel?.startPlaying()
     }
 
     fun onRestartClick(view: View)
     {
-        restart()
+        viewModel?.restart()
     }
 
     private fun updateRecordView()
     {
-        binding.textRecord.text = getString(R.string.WIN_COUNT, _recorder.winCount, _recorder.loseCount)
+        binding.textRecord.text = getString(R.string.WIN_COUNT, viewModel?.recorder?.winCount, viewModel?.recorder?.loseCount)
     }
 
-    private fun restart()
+    private fun initViewModel()
     {
-        _status = GameStatus.PREPARE
-        _numDoneCount = 0
-        updateButtonWithStatus()
+        viewModel = BingoViewModel(this, GRID_DIMENSION)
 
-        binding.viewAiCount.reset()
-        binding.viewPlayerCount.reset()
+        viewModel?.onStatusUpdated = {
+            status: GameStatus ->
 
-        _logic?.restart()
+            updateButtonWithStatus(status)
+
+            when (status)
+            {
+                GameStatus.PREPARE ->
+                {
+                    binding.viewAiCount.reset()
+                    binding.viewPlayerCount.reset()
+                }
+
+                GameStatus.PLAYING ->
+                    Toast.makeText(this, R.string.GAME_START, Toast.LENGTH_SHORT).show()
+
+                GameStatus.END -> {}
+            }
+        }
     }
 
-    private fun startPlaying()
+    private fun updateButtonWithStatus(status: GameStatus)
     {
-        _logic?.fillNumber()
-        _status = GameStatus.PLAYING
-        updateButtonWithStatus()
-
-        Toast.makeText(this, R.string.GAME_START, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun updateButtonWithStatus()
-    {
-        when (_status)
+        when (status)
         {
-            GameStatus.PREPARE ->
+             GameStatus.PREPARE ->
              {
                  binding.buttonAutoFill.visibility = View.VISIBLE
                  binding.buttonRestart.visibility = View.GONE
@@ -243,12 +198,6 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
             {
                 binding.buttonAutoFill.visibility = View.GONE
                 binding.buttonRestart.visibility = View.VISIBLE
-            }
-
-            else ->
-            {
-                binding.buttonAutoFill.visibility = View.INVISIBLE
-                binding.buttonRestart.visibility = View.INVISIBLE
             }
         }
     }
@@ -274,7 +223,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
                 grid.locY = j
                 grid.type = type
 
-                _logic?.addGrid(type, grid, i, j)
+                viewModel?.addGrid(type, grid, i, j)
 
                 if (type == PlayerType.PLAYER)
                 {

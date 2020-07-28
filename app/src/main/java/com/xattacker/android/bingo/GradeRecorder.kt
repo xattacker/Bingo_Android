@@ -8,12 +8,12 @@ class GradeRecorder
     var loseCount: Int = 0
         private set
 
-    fun addWinCount()
+    fun addWin()
     {
         winCount++
     }
 
-    fun addLoseCount()
+    fun addLose()
     {
         loseCount++
     }

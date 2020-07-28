@@ -19,26 +19,13 @@ object AppProperties
     val appVersion: String
         get()
         {
-            var version = ""
-
-            _activity?.let {
-                version = it.packageManager.getPackageInfo(it.packageName, 0).versionName
-            }
-
-            return version
+            return _activity?.packageManager?.getPackageInfo(_activity?.packageName, 0)?.versionName ?: ""
         }
 
     val screenDisplay: Display?
         get()
         {
-            var display: Display? = null
-
-            if (_activity != null)
-            {
-                display = _activity?.windowManager?.defaultDisplay
-            }
-
-            return display
+            return _activity?.windowManager?.defaultDisplay
         }
 
     val displayHeight: Int
