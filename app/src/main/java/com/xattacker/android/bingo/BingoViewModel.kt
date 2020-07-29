@@ -21,6 +21,12 @@ class BingoViewModel: BingoLogicListener
     var onStatusUpdated: ((status: GameStatus) -> Unit)? = null
 
     private var status: GameStatus = GameStatus.PREPARE
+        set(value)
+        {
+            field = value
+            onStatusUpdated?.invoke(value)
+        }
+
     private var numDoneCount = 0 // 佈子數, 當玩家把25個數字都佈完後 開始遊戲
     private val recorder = GradeRecorder()
     private var logic: BingoLogic
@@ -50,7 +56,6 @@ class BingoViewModel: BingoLogicListener
         }
 
         this.status = GameStatus.END
-        onStatusUpdated?.invoke(this.status)
 
         // bypass to another listener
         this.logicListener.get()?.onWon(aWinner)
@@ -100,18 +105,14 @@ class BingoViewModel: BingoLogicListener
 
     fun restart()
     {
-        this.status = GameStatus.PREPARE
         this.numDoneCount = 0
+        this.status = GameStatus.PREPARE
         this.logic.restart()
-
-        onStatusUpdated?.invoke(this.status)
     }
 
     fun startPlaying()
     {
         this.logic.fillNumber()
         this.status = GameStatus.PLAYING
-
-        onStatusUpdated?.invoke(this.status)
     }
 }
