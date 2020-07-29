@@ -1,11 +1,18 @@
 package com.xattacker.android.bingo
 
-class GradeRecorder
+
+interface GradeRecord
 {
-    var winCount: Int = 0
+    val winCount: Int
+    val loseCount: Int
+}
+
+class GradeRecorder : GradeRecord
+{
+    override var winCount: Int = 0
         private set
 
-    var loseCount: Int = 0
+    override var loseCount: Int = 0
         private set
 
     fun addWin()

@@ -28,7 +28,6 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         private val GRID_DIMENSION = 5
     }
 
-
     private lateinit var binding: ActivityMainBinding
     private var viewModel: BingoViewModel? = null
 
@@ -111,7 +110,6 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
     override fun onClick(aView: View)
     {
         val grid = aView as GridView
-
         viewModel?.handleGridClick(grid, grid.locX, grid.locY)
     }
 
@@ -150,7 +148,9 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 
     private fun updateRecordView()
     {
-        binding.textRecord.text = getString(R.string.WIN_COUNT, viewModel?.recorder?.winCount, viewModel?.recorder?.loseCount)
+        viewModel?.record?.let {
+            binding.textRecord.text = getString(R.string.WIN_COUNT, it.winCount, it.loseCount)
+        }
     }
 
     private fun initViewModel()

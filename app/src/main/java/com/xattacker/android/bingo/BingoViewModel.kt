@@ -15,11 +15,14 @@ enum class GameStatus
 
 class BingoViewModel: BingoLogicListener
 {
-    val recorder = GradeRecorder()
+    val record: GradeRecord
+        get() = recorder
+
     var onStatusUpdated: ((status: GameStatus) -> Unit)? = null
 
     private var status: GameStatus = GameStatus.PREPARE
     private var numDoneCount = 0 // 佈子數, 當玩家把25個數字都佈完後 開始遊戲
+    private val recorder = GradeRecorder()
     private var logic: BingoLogic
     private var logicListener: WeakReference<BingoLogicListener>
 
