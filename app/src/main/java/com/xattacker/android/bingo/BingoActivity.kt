@@ -35,18 +35,15 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
     {
         super.onCreate(savedInstanceState)
 
-        AppProperties.initial(this)
-
-        this.initViewModel()
-
         // use view Binding mode
         binding = ActivityMainBinding.inflate(this.layoutInflater)
         setContentView(binding.root)
 
+        AppProperties.initial(this)
+        this.initViewModel()
+
         setupGrid(binding.layoutAiGrid, PlayerType.COMPUTER)
         setupGrid(binding.layoutPlayerGrid, PlayerType.PLAYER)
-
-        updateRecordView()
 
         setupCountView(binding.viewAiCount)
         setupCountView(binding.viewPlayerCount)
@@ -127,8 +124,6 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
 
     override fun onWon(aWinner: PlayerType)
     {
-        updateRecordView()
-
         AlertDialogCreator.showDialog(
             AlertTitleType.Notification,
             getString(if (aWinner == PlayerType.COMPUTER) R.string.YOU_LOSE else R.string.YOU_WIN),
@@ -146,16 +141,16 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         viewModel?.restart()
     }
 
-    private fun updateRecordView()
-    {
-        viewModel?.record?.let {
-            binding.textRecord.text = getString(R.string.WIN_COUNT, it.winCount, it.loseCount)
-        }
-    }
-
     private fun initViewModel()
     {
         viewModel = BingoViewModel(this, GRID_DIMENSION)
+
+        // data binding
+        viewModel?.onGradeUpdated = {
+            grade: GradeRecord ->
+
+            binding.textRecord.text = getString(R.string.WIN_COUNT, grade.winCount, grade.loseCount)
+        }
 
         viewModel?.onStatusUpdated = {
             status: GameStatus ->

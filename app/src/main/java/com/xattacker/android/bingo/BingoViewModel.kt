@@ -15,8 +15,12 @@ enum class GameStatus
 
 class BingoViewModel: BingoLogicListener
 {
-    val record: GradeRecord
-        get() = recorder
+    var onGradeUpdated: ((grade: GradeRecord) -> Unit)? = null
+        set(value)
+        {
+            field = value
+            onGradeUpdated?.invoke(recorder)
+        }
 
     var onStatusUpdated: ((status: GameStatus) -> Unit)? = null
 
@@ -54,6 +58,8 @@ class BingoViewModel: BingoLogicListener
         {
             this.recorder.addWin()
         }
+
+        this.onGradeUpdated?.invoke(recorder)
 
         this.status = GameStatus.END
 
