@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.github.triplet.play'
+
+if (System.getenv('PRIVATE_GOOGLE_PLAY_PUBLISH_API_KEY_PATH') != null) {
+    apply plugin: 'com.github.triplet.play'
+}
 
 android {
     compileSdkVersion 28
@@ -17,13 +20,15 @@ android {
         versionName '1.2.1'
     }
     
-    signingConfigs {
-        config {
-            keyAlias System.getenv('PRIVATE_ANDROID_KEY_STORE_KEY_ALIAS')
-            keyPassword System.getenv('PRIVATE_ANDROID_KEY_STORE_KEY_PASSWORD')
-            storeFile file(System.getenv('PRIVATE_ANDROID_KEY_STORE_PATH'))
-            storePassword System.getenv('PRIVATE_ANDROID_KEY_STORE_STORE_PASSWORD')
-            v2SigningEnabled false
+    if (System.getenv('PRIVATE_ANDROID_KEY_STORE_KEY_ALIAS') != null) {
+        signingConfigs {
+            config {
+                keyAlias System.getenv('PRIVATE_ANDROID_KEY_STORE_KEY_ALIAS')
+                keyPassword System.getenv('PRIVATE_ANDROID_KEY_STORE_KEY_PASSWORD')
+                storeFile file(System.getenv('PRIVATE_ANDROID_KEY_STORE_PATH'))
+                storePassword System.getenv('PRIVATE_ANDROID_KEY_STORE_STORE_PASSWORD')
+                v2SigningEnabled false
+            }
         }
     }
     
@@ -31,8 +36,11 @@ android {
         release {
             minifyEnabled true
             proguardFiles'proguard.cfg'
-            signingConfig signingConfigs.config
-
+            
+            if (System.getenv('PRIVATE_ANDROID_KEY_STORE_KEY_ALIAS') != null) {
+                 signingConfig signingConfigs.config
+            }
+            
             applicationVariants.all {
                 variant ->
                     variant.outputs.each {
@@ -49,9 +57,11 @@ android {
     }
 }
 
-play {
-    serviceAccountCredentials = file(System.getenv('PRIVATE_GOOGLE_PLAY_PUBLISH_API_KEY_PATH'))
-    track = 'production'
+if (System.getenv('PRIVATE_GOOGLE_PLAY_PUBLISH_API_KEY_PATH') != null) {
+    play {
+        serviceAccountCredentials = file(System.getenv('PRIVATE_GOOGLE_PLAY_PUBLISH_API_KEY_PATH'))
+        track = 'production'
+    }
 }
 
 dependencies {
