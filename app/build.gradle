@@ -6,7 +6,7 @@ if (System.getenv('PRIVATE_GOOGLE_PLAY_PUBLISH_API_KEY_PATH') != null) {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     buildFeatures {
         viewBinding = true
@@ -15,7 +15,7 @@ android {
     defaultConfig {
         applicationId 'com.xattacker.android.bingo'
         minSdkVersion 18
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 9
         versionName '1.2.1'
     }
