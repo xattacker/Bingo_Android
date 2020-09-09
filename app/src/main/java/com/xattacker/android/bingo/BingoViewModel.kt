@@ -35,6 +35,8 @@ class BingoViewModel: BingoLogicListener
     {
         this.logic = BingoLogic(this, dimension)
         this.logicListener = WeakReference(listener)
+
+        this.gradeRecordBinding.onNext(this.recorder)
     }
 
     override fun onLineConnected(aTurn: PlayerType, aCount: Int)
