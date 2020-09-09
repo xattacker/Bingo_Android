@@ -146,13 +146,13 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         viewModel = BingoViewModel(this, GRID_DIMENSION)
 
         // data binding
-        viewModel?.onGradeUpdated = {
+        viewModel?.gradeRecordBinding?.subscribe {
             grade: GradeRecord ->
 
             binding.textRecord.text = getString(R.string.WIN_COUNT, grade.winCount, grade.loseCount)
         }
 
-        viewModel?.onStatusUpdated = {
+        viewModel?.statusBinding?.subscribe {
             status: GameStatus ->
 
             updateButtonWithStatus(status)
