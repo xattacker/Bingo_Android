@@ -4,6 +4,7 @@ import com.xattacker.android.bingo.logic.BingoGrid
 import com.xattacker.android.bingo.logic.BingoLogic
 import com.xattacker.android.bingo.logic.BingoLogicListener
 import com.xattacker.android.bingo.logic.PlayerType
+import io.reactivex.subjects.BehaviorSubject
 import java.lang.ref.WeakReference
 
 enum class GameStatus
@@ -15,20 +16,14 @@ enum class GameStatus
 
 class BingoViewModel: BingoLogicListener
 {
-    var onGradeUpdated: ((grade: GradeRecord) -> Unit)? = null
-        set(value)
-        {
-            field = value
-            onGradeUpdated?.invoke(recorder)
-        }
-
-    var onStatusUpdated: ((status: GameStatus) -> Unit)? = null
+    val gradeRecordBinding: BehaviorSubject<GradeRecord> = BehaviorSubject.create()
+    val statusBinding: BehaviorSubject<GameStatus> = BehaviorSubject.create()
 
     private var status: GameStatus = GameStatus.PREPARE
         set(value)
         {
             field = value
-            onStatusUpdated?.invoke(value)
+            statusBinding.onNext(value)
         }
 
     private var numDoneCount = 0 // 佈子數, 當玩家把25個數字都佈完後 開始遊戲
@@ -59,8 +54,7 @@ class BingoViewModel: BingoLogicListener
             this.recorder.addWin()
         }
 
-        this.onGradeUpdated?.invoke(recorder)
-
+        this.gradeRecordBinding.onNext(recorder)
         this.status = GameStatus.END
 
         // bypass to another listener
