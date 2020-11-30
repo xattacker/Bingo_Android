@@ -16,15 +16,8 @@ enum class GameStatus
 
 class BingoViewModel: BingoLogicListener
 {
-    val gradeRecordBinding: BehaviorSubject<GradeRecord> = BehaviorSubject.create()
-    val statusBinding: BehaviorSubject<GameStatus> = BehaviorSubject.create()
-
-    private var status: GameStatus = GameStatus.PREPARE
-        set(value)
-        {
-            field = value
-            statusBinding.onNext(value)
-        }
+    val gradeRecord: BehaviorSubject<GradeRecord> = BehaviorSubject.create()
+    val status: BehaviorSubject<GameStatus> = BehaviorSubject.createDefault(GameStatus.PREPARE)
 
     private var numDoneCount = 0 // 佈子數, 當玩家把25個數字都佈完後 開始遊戲
     private val recorder = GradeRecorder()
@@ -36,7 +29,7 @@ class BingoViewModel: BingoLogicListener
         this.logic = BingoLogic(this, dimension)
         this.logicListener = WeakReference(listener)
 
-        this.gradeRecordBinding.onNext(this.recorder)
+        this.gradeRecord.onNext(this.recorder)
     }
 
     override fun onLineConnected(aTurn: PlayerType, aCount: Int)
@@ -56,8 +49,8 @@ class BingoViewModel: BingoLogicListener
             this.recorder.addWin()
         }
 
-        this.gradeRecordBinding.onNext(recorder)
-        this.status = GameStatus.END
+        this.gradeRecord.onNext(recorder)
+        this.status.onNext(GameStatus.END)
 
         // bypass to another listener
         this.logicListener.get()?.onWon(aWinner)
@@ -75,7 +68,7 @@ class BingoViewModel: BingoLogicListener
 
     fun handleGridClick(grid: BingoGrid, x: Int, y: Int)
     {
-        when (this.status)
+        when (this.status.value)
         {
             GameStatus.PREPARE ->
             {
@@ -108,13 +101,13 @@ class BingoViewModel: BingoLogicListener
     fun restart()
     {
         this.numDoneCount = 0
-        this.status = GameStatus.PREPARE
+        this.status.onNext(GameStatus.PREPARE)
         this.logic.restart()
     }
 
     fun startPlaying()
     {
         this.logic.fillNumber()
-        this.status = GameStatus.PLAYING
+        this.status.onNext(GameStatus.PLAYING)
     }
 }
