@@ -28,7 +28,7 @@ class BingoViewModel: BingoLogicListener
 {
     val gradeRecord: Observable<GradeRecord>
         get() = this.gradeRecordSubject
-    
+
     val status: Observable<GameStatus>
         get() = this.statusSubject
 
