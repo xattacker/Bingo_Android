@@ -19,7 +19,7 @@ object AppProperties
     val appVersion: String
         get()
         {
-            return _activity?.packageManager?.getPackageInfo(_activity?.packageName, 0)?.versionName ?: ""
+            return _activity?.packageManager?.getPackageInfo(_activity?.packageName ?: "", 0)?.versionName ?: ""
         }
 
     val screenDisplay: Display?

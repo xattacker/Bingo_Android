@@ -21,7 +21,7 @@ import com.xattacker.android.bingo.view.CountView
 import com.xattacker.android.bingo.view.GridView
 import com.xattacker.android.bingo.view.BlinkViewAnimator
 
-class BingoActivity : Activity(), OnClickListener, BingoLogicListener
+class BingoActivity : Activity(), BingoLogicListener
 {
     companion object
     {
@@ -48,7 +48,7 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         setupCountView(binding.viewAiCount)
         setupCountView(binding.viewPlayerCount)
 
-        binding.textVersion.text = "v " + (AppProperties.appVersion ?: "")
+        binding.textVersion.text = "v " + (AppProperties.appVersion)
     }
 
     override fun onStart()
@@ -104,12 +104,6 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
         return super.onKeyDown(aKeyCode, aEvent)
     }
 
-    override fun onClick(aView: View)
-    {
-        val grid = aView as GridView
-        viewModel?.handleGridClick(grid, grid.locX, grid.locY)
-    }
-
     override fun onLineConnected(aTurn: PlayerType, aCount: Int)
     {
         if (aTurn == PlayerType.COMPUTER)
@@ -133,7 +127,6 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
     fun onAutoFillNumClick(view: View)
     {
         viewModel?.fillNumber(PlayerType.PLAYER)
-        viewModel?.startPlaying()
     }
 
     fun onRestartClick(view: View)
@@ -217,13 +210,8 @@ class BingoActivity : Activity(), OnClickListener, BingoLogicListener
                 grid.locX = i
                 grid.locY = j
                 grid.type = type
+                viewModel?.addGrid(grid)
 
-                viewModel?.addGrid(type, grid, i, j)
-
-                if (type == PlayerType.PLAYER)
-                {
-                    grid.setOnClickListener(this)
-                }
 
                 val para = TableRow.LayoutParams(width, width)
                 para.setMargins(padding, padding, padding, padding)

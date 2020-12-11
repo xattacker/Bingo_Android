@@ -4,6 +4,7 @@ import com.xattacker.android.bingo.logic.BingoGrid
 import com.xattacker.android.bingo.logic.BingoLogic
 import com.xattacker.android.bingo.logic.BingoLogicListener
 import com.xattacker.android.bingo.logic.PlayerType
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.lang.ref.WeakReference
 
@@ -14,11 +15,25 @@ enum class GameStatus
     END
 }
 
+
+interface  BingoGridView: BingoGrid
+{
+    val locX: Int
+    val locY: Int
+    val clicked: Observable<BingoGridView>
+}
+
+
 class BingoViewModel: BingoLogicListener
 {
-    val gradeRecord: BehaviorSubject<GradeRecord> = BehaviorSubject.create()
-    val status: BehaviorSubject<GameStatus> = BehaviorSubject.createDefault(GameStatus.PREPARE)
+    val gradeRecord: Observable<GradeRecord>
+        get() = this.gradeRecordSubject
+    
+    val status: Observable<GameStatus>
+        get() = this.statusSubject
 
+    private val gradeRecordSubject: BehaviorSubject<GradeRecord> = BehaviorSubject.create()
+    private val statusSubject: BehaviorSubject<GameStatus> = BehaviorSubject.createDefault(GameStatus.PREPARE)
     private var numDoneCount = 0 // 佈子數, 當玩家把25個數字都佈完後 開始遊戲
     private val recorder = GradeRecorder()
     private var logic: BingoLogic
@@ -29,7 +44,7 @@ class BingoViewModel: BingoLogicListener
         this.logic = BingoLogic(this, dimension)
         this.logicListener = WeakReference(listener)
 
-        this.gradeRecord.onNext(this.recorder)
+        this.gradeRecordSubject.onNext(this.recorder)
     }
 
     override fun onLineConnected(aTurn: PlayerType, aCount: Int)
@@ -49,26 +64,49 @@ class BingoViewModel: BingoLogicListener
             this.recorder.addWin()
         }
 
-        this.gradeRecord.onNext(recorder)
-        this.status.onNext(GameStatus.END)
+        this.gradeRecordSubject.onNext(recorder)
+        this.statusSubject.onNext(GameStatus.END)
 
         // bypass to another listener
         this.logicListener.get()?.onWon(aWinner)
     }
 
-    fun addGrid(type: PlayerType, grid: BingoGrid, x: Int, y: Int)
+    fun addGrid(grid: BingoGridView)
     {
-        this.logic.addGrid(type, grid, x, y)
+        this.logic.addGrid(grid.type, grid, grid.locX, grid.locY)
+
+        if (grid.type == PlayerType.PLAYER)
+        {
+            // bind click event
+            grid.clicked.subscribe {
+                grid: BingoGridView ->
+                handleGridClick(grid)
+            }
+        }
     }
 
     fun fillNumber(type: PlayerType)
     {
         this.logic.fillNumber(type)
+        this.startPlaying()
     }
 
-    fun handleGridClick(grid: BingoGrid, x: Int, y: Int)
+    fun restart()
     {
-        when (this.status.value)
+        this.numDoneCount = 0
+        this.statusSubject.onNext(GameStatus.PREPARE)
+        this.logic.restart()
+    }
+
+    private fun startPlaying()
+    {
+        this.logic.fillNumber()
+        this.statusSubject.onNext(GameStatus.PLAYING)
+    }
+
+    private fun handleGridClick(grid: BingoGridView)
+    {
+        when (this.statusSubject.value)
         {
             GameStatus.PREPARE ->
             {
@@ -89,25 +127,12 @@ class BingoViewModel: BingoLogicListener
                 if (!grid.isSelectedOn)
                 {
                     grid.isSelectedOn = true
-                    this.logic.winCheck(x, y)
+                    this.logic.winCheck(grid.locX, grid.locY)
                 }
             }
 
             GameStatus.END ->
                 restart()
         }
-    }
-
-    fun restart()
-    {
-        this.numDoneCount = 0
-        this.status.onNext(GameStatus.PREPARE)
-        this.logic.restart()
-    }
-
-    fun startPlaying()
-    {
-        this.logic.fillNumber()
-        this.status.onNext(GameStatus.PLAYING)
     }
 }

@@ -9,14 +9,19 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.View
 import android.widget.TextView
+import com.xattacker.android.bingo.BingoGridView
 import com.xattacker.android.bingo.CustomProperties
 import com.xattacker.android.bingo.FontType
+import com.xattacker.android.bingo.GradeRecord
 import com.xattacker.android.bingo.logic.BingoGrid
 import com.xattacker.android.bingo.logic.PlayerType
 import com.xattacker.android.bingo.logic.ConnectedDirection
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 
-class GridView : TextView, BingoGrid
+class GridView : TextView, BingoGridView
 {
     enum class BorderAngleType
     {
@@ -63,10 +68,14 @@ class GridView : TextView, BingoGrid
             updateBackgroundColor()
         }
 
-    var locX: Int = 0
-    var locY: Int = 0
+    override var locX: Int = 0
+    override var locY: Int = 0
 
-    private var _directions = BooleanArray(4)
+    override val clicked: Observable<BingoGridView>
+        get() = this.clickedSubject
+
+    private val clickedSubject: BehaviorSubject<BingoGridView> = BehaviorSubject.create()
+    private var directions = BooleanArray(4)
     private lateinit var _paint: Paint
 
     constructor(context: Context) : super(context)
@@ -103,9 +112,9 @@ class GridView : TextView, BingoGrid
         _paint.strokeWidth = 5f
 
         // draw connected line
-        for (i in _directions.indices)
+        for (i in directions.indices)
         {
-            if (_directions[i])
+            if (directions[i])
             {
                 when (ConnectedDirection.parse(i))
                 {
@@ -134,9 +143,9 @@ class GridView : TextView, BingoGrid
         this.isConnected = false
         this.isSelectedOn = false
 
-        for (i in _directions.indices)
+        for (i in directions.indices)
         {
-           _directions[i] = false
+            directions[i] = false
         }
 
         this.value = 0
@@ -144,18 +153,16 @@ class GridView : TextView, BingoGrid
 
     override fun isLineConnected(aDirection: ConnectedDirection): Boolean
     {
-        return _directions.get(aDirection.value())
+        return directions.get(aDirection.value())
     }
 
     override fun setConnectedLine(aDirection: ConnectedDirection, aConnected: Boolean)
     {
-            this._directions[aDirection.value()] = aConnected
+            this.directions[aDirection.value()] = aConnected
 
             if (!aConnected)
             {
-                this.isConnected = _directions.find {
-                                                    dir -> dir
-                                                } == true
+                this.isConnected = directions.find {dir -> dir} == true
             }
             else
             {
@@ -197,6 +204,9 @@ class GridView : TextView, BingoGrid
     {
         this.gravity = Gravity.CENTER
         this.setTextSize(TypedValue.COMPLEX_UNIT_PX, CustomProperties.getDimensionPxSize(FontType.NORMAL_FONT_SIZE, context).toFloat())
+        this.setOnClickListener {
+            this.clickedSubject.onNext(this)
+        }
         
         this.isConnected = false
         this.isSelectedOn = false
