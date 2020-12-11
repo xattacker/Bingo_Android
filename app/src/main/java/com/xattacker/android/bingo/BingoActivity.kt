@@ -126,7 +126,7 @@ class BingoActivity : Activity(), BingoLogicListener
 
     fun onAutoFillNumClick(view: View)
     {
-        viewModel?.fillNumber(PlayerType.PLAYER)
+        viewModel?.fillNumber()
     }
 
     fun onRestartClick(view: View)

@@ -85,9 +85,9 @@ class BingoViewModel: BingoLogicListener
         }
     }
 
-    fun fillNumber(type: PlayerType)
+    fun fillNumber()
     {
-        this.logic.fillNumber(type)
+        this.logic.fillNumber(PlayerType.PLAYER)
         this.startPlaying()
     }
 
