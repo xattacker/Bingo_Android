@@ -20,6 +20,7 @@ import com.xattacker.android.bingo.util.*
 import com.xattacker.android.bingo.view.CountView
 import com.xattacker.android.bingo.view.GridView
 import com.xattacker.android.bingo.view.BlinkViewAnimator
+import com.xattacker.android.bingo.view.reset
 
 class BingoActivity : Activity(), BingoLogicListener
 {

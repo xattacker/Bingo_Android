@@ -9,16 +9,16 @@ import android.util.AttributeSet
 import android.view.View
 import com.xattacker.android.bingo.R
 
-internal class CountView: View
+internal class CountView: View, CountViewInterface
 {
-    var count: Int = 0
+    override var count: Int = 0
         set(value)
         {
             field = value
             invalidate() // repaint
         }
 
-    var countColor: Int
+    override var countColor: Int
         get() = paint.color
         set(value)
         {
@@ -37,7 +37,6 @@ internal class CountView: View
         paint.isAntiAlias = true
 
         val array = context.obtainStyledAttributes(attrs, R.styleable.CountView)
-
         this.countColor = array.getColor(R.styleable.CountView_countColor, Color.BLUE)
 
         array.recycle()
@@ -50,11 +49,6 @@ internal class CountView: View
             count++
             invalidate() // repaint
         }
-    }
-
-    fun reset()
-    {
-        this.count = 0
     }
 
     override fun onDraw(aCanvas: Canvas)
