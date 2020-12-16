@@ -44,7 +44,7 @@
 					            android:textSize="@dimen/LARGE_NORMAL_FONT_SIZE"
 							    android:layout_marginBottom="6dp"/>
 
-						<com.xattacker.android.bingo.view.CountView
+						<com.xattacker.android.bingo.view.AnimatedCountView
 								android:id="@+id/view_ai_count"
 								android:layout_width="match_parent"
 								android:layout_height="wrap_content"
@@ -71,6 +71,7 @@
 				        android:layout_centerVertical="true"
 				        android:layout_toLeftOf="@id/layout_player_grid"
 				        android:orientation="vertical"
+					    android:gravity="center"
 					    android:padding="6dip">
 				        				
 					    <TextView
@@ -82,7 +83,7 @@
 					            android:textSize="@dimen/LARGE_NORMAL_FONT_SIZE"
 							    android:layout_marginBottom="6dp"/>
 
-					   <com.xattacker.android.bingo.view.CountView
+					   <com.xattacker.android.bingo.view.AnimatedCountView
 							   android:id="@+id/view_player_count"
 							   android:layout_width="match_parent"
 							   android:layout_height="wrap_content"

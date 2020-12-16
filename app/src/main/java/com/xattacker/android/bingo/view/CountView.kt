@@ -9,7 +9,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.xattacker.android.bingo.R
 
-internal class CountView: View, CountViewInterface
+internal class CountView: View, CountViewType
 {
     override var count: Int = 0
         set(value)

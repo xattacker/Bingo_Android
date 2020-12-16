@@ -1,15 +1,15 @@
 package com.xattacker.android.bingo.view
 
-interface CountViewInterface
+interface CountViewType
 {
     var count: Int
     var countColor: Int
 }
 
-val CountViewInterface.maxCount: Int
+val CountViewType.maxCount: Int
     get() = 5
 
-fun CountViewInterface.reset()
+fun CountViewType.reset()
 {
     this.count = 0
 }

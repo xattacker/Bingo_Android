@@ -17,10 +17,7 @@ import com.xattacker.android.bingo.logic.BingoLogic
 import com.xattacker.android.bingo.logic.PlayerType
 import com.xattacker.android.bingo.logic.BingoLogicListener
 import com.xattacker.android.bingo.util.*
-import com.xattacker.android.bingo.view.CountView
-import com.xattacker.android.bingo.view.GridView
-import com.xattacker.android.bingo.view.BlinkViewAnimator
-import com.xattacker.android.bingo.view.reset
+import com.xattacker.android.bingo.view.*
 
 class BingoActivity : Activity(), BingoLogicListener
 {
@@ -46,8 +43,7 @@ class BingoActivity : Activity(), BingoLogicListener
         setupGrid(binding.layoutAiGrid, PlayerType.COMPUTER)
         setupGrid(binding.layoutPlayerGrid, PlayerType.PLAYER)
 
-        setupCountView(binding.viewAiCount)
-        setupCountView(binding.viewPlayerCount)
+        setupCountView(binding.viewAiCount, binding.viewPlayerCount)
 
         binding.textVersion.text = "v " + (AppProperties.appVersion)
     }
@@ -221,10 +217,13 @@ class BingoActivity : Activity(), BingoLogicListener
         }
     }
 
-    private fun setupCountView(countView: CountView)
+    private fun setupCountView(vararg countViews: View)
     {
-        countView.layoutParams.height = CustomProperties.getScreenWidth(0.1f)
-        countView.layoutParams.width = CustomProperties.getScreenWidth(0.1f)
+        for (view in countViews)
+        {
+            view.layoutParams.height = CustomProperties.getScreenWidth(0.1f)
+            view.layoutParams.width = CustomProperties.getScreenWidth(0.1f)
+        }
     }
 
     private fun showHintAnimation()
