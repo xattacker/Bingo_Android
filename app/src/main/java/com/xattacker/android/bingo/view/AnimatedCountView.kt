@@ -28,7 +28,7 @@ class AnimatedCountView: View, CountViewType
                                             this.alpha = value
                                     })
 
-                anim.addListener (
+                anim.addListener(
                 object: AnimatorListenerAdapter()
                 {
                     override fun onAnimationEnd(animation: Animator)
