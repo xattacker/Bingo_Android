@@ -78,6 +78,8 @@ class AnimatedCountView: View, CountViewType
         paint.color = Color.BLUE
         paint.style = Paint.Style.STROKE
         paint.strokeCap = Paint.Cap.ROUND
+        paint.strokeJoin = Paint.Join.ROUND // set the join to round you want
+      //  paint.setPathEffect(CornerPathEffect(10f) )
         paint.isAntiAlias = true
 
         val array = context.obtainStyledAttributes(attrs, R.styleable.CountView)
@@ -146,17 +148,12 @@ class AnimatedCountView: View, CountViewType
         }
     }
 
-    internal class LinePath
+    internal class LinePath constructor(private val start: PointF, private val end: PointF)
     {
-       // private val path = Path()
-        private val start: PointF
-        private val end: PointF
         private val offset: PointF
 
-        constructor(start: PointF, end: PointF)
+        init
         {
-            this.start = start
-            this.end = end
             this.offset = PointF(start.x, start.y)
         }
 
@@ -189,14 +186,11 @@ class AnimatedCountView: View, CountViewType
 
         fun draw(aCanvas: Canvas, paint: Paint)
         {
-            /*
             val path = Path()
             path.moveTo(this.start.x, this.start.y)
             path.lineTo(this.offset.x, this.offset.y)
             path.close()
             aCanvas.drawPath(path, paint)
-            */
-            aCanvas.drawLine(this.start.x, this.start.y, this.offset.x, this.offset.y, paint)
         }
     }
 }
