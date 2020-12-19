@@ -16,8 +16,8 @@ android {
         applicationId 'com.xattacker.android.bingo'
         minSdkVersion 18
         targetSdkVersion 29
-        versionCode 9
-        versionName '1.2.1'
+        versionCode 10
+        versionName '1.2.2'
     }
     
     if (System.getenv('PRIVATE_ANDROID_KEY_STORE_KEY_ALIAS') != null) {
@@ -66,7 +66,7 @@ if (System.getenv('PRIVATE_GOOGLE_PLAY_PUBLISH_API_KEY_PATH') != null) {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "io.reactivex.rxjava2:rxjava:2.2.19"
