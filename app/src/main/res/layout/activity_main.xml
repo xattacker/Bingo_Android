@@ -57,7 +57,7 @@
 			        android:layout_height="wrap_content"
 			        android:layout_marginTop="15dip">
                 	 
-                   <TableLayout
+                   <com.xattacker.android.bingo.view.ExtendedTableLayout
                 	    android:id="@+id/layout_player_grid"
 				        android:layout_width="wrap_content"
 				        android:layout_height="wrap_content"

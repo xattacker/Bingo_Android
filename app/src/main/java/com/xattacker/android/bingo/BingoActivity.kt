@@ -19,7 +19,7 @@ import com.xattacker.android.bingo.logic.BingoLogicListener
 import com.xattacker.android.bingo.util.*
 import com.xattacker.android.bingo.view.*
 
-class BingoActivity : Activity(), BingoLogicListener
+class BingoActivity : Activity(), BingoLogicListener, FlippableViewListener
 {
     companion object
     {
@@ -113,6 +113,16 @@ class BingoActivity : Activity(), BingoLogicListener
             getString(if (aWinner == PlayerType.COMPUTER) R.string.YOU_LOSE else R.string.YOU_WIN))
     }
 
+    override fun onFlipStarted(flipped: FlippableView)
+    {
+        this.binding.layoutPlayerGrid.isEnabled = false
+    }
+
+    override fun onFlipEnded(flipped: FlippableView)
+    {
+        this.binding.layoutPlayerGrid.isEnabled = true
+    }
+
     fun onAutoFillNumClick(view: View)
     {
         viewModel?.fillNumber()
@@ -182,7 +192,7 @@ class BingoActivity : Activity(), BingoLogicListener
     private fun setupGrid(aTable: TableLayout?, type: PlayerType)
     {
         var row: TableRow?
-        var grid: GridView?
+        var grid: View?
         val width = CustomProperties.getScreenWidth(0.125f)
         val padding = (1.8 * AppProperties.density).toInt()
 
@@ -194,13 +204,24 @@ class BingoActivity : Activity(), BingoLogicListener
 
             for (j in 0 .. GRID_DIMENSION - 1)
             {
-                grid = GridView(this)
-                grid.value = 0
-                grid.locX = i
-                grid.locY = j
-                grid.type = type
-                viewModel?.addGrid(grid)
+                if (type == PlayerType.PLAYER)
+                {
+                    grid =  GridView(this)
+                }
+                else // COMPUTER
+                {
+                    grid =  FlippableCardView(this)
+                    grid.listener = this
+                }
 
+                if (grid is BingoGridView)
+                {
+                    grid.value = 0
+                    grid.locX = i
+                    grid.locY = j
+                    grid.type = type
+                    viewModel?.addGrid(grid)
+                }
 
                 val para = TableRow.LayoutParams(width, width)
                 para.setMargins(padding, padding, padding, padding)

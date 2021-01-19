@@ -18,8 +18,8 @@ enum class GameStatus
 
 interface  BingoGridView: BingoGrid
 {
-    val locX: Int
-    val locY: Int
+    var locX: Int
+    var locY: Int
     val clicked: Observable<BingoGridView>
 }
 
@@ -79,8 +79,8 @@ class BingoViewModel: BingoLogicListener
         {
             // bind click event
             grid.clicked.subscribe {
-                grid: BingoGridView ->
-                handleGridClick(grid)
+                view: BingoGridView ->
+                handleGridClick(view)
             }
         }
     }
