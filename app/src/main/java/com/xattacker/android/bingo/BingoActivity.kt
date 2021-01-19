@@ -60,12 +60,10 @@ class BingoActivity : Activity(), BingoLogicListener
 
         viewModel?.restart()
 
-        val handler = Handler()
-        handler.postDelayed({
+        this.delay(500) {
             Toast.makeText(this@BingoActivity, R.string.FILL_NUMBER, Toast.LENGTH_LONG).show()
             showHintAnimation()
-        },
-        500)
+        }
     }
 
     override fun onDestroy()
@@ -80,19 +78,14 @@ class BingoActivity : Activity(), BingoLogicListener
     {
         if (aKeyCode == KeyEvent.KEYCODE_BACK)
         {
-            AlertDialogCreator.showDialog(
-                AlertTitleType.Confirm,
-                AlertButtonStyle.YesNo,
-                getString(R.string.CONFIRM_EXIT),
-                this) {
-                dialog, which ->
+            showConfirmDialog(
+                getString(R.string.CONFIRM_EXIT)) {
+                which ->
                 if (which == DialogInterface.BUTTON_POSITIVE)
                 {
                     // yes
                     this@BingoActivity.finish()
                 }
-
-                dialog?.dismiss()
             }
 
             return true
@@ -115,10 +108,9 @@ class BingoActivity : Activity(), BingoLogicListener
 
     override fun onWon(aWinner: PlayerType)
     {
-        AlertDialogCreator.showDialog(
+        showDialog(
             AlertTitleType.Notification,
-            getString(if (aWinner == PlayerType.COMPUTER) R.string.YOU_LOSE else R.string.YOU_WIN),
-            this)
+            getString(if (aWinner == PlayerType.COMPUTER) R.string.YOU_LOSE else R.string.YOU_WIN))
     }
 
     fun onAutoFillNumClick(view: View)
