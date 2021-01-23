@@ -16,7 +16,7 @@ android {
         applicationId 'com.xattacker.android.bingo'
         minSdkVersion 18
         targetSdkVersion 29
-        versionCode 11
+        versionCode 12
         versionName '1.3.0'
     }
     
