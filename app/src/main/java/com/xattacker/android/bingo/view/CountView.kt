@@ -44,7 +44,7 @@ internal class CountView: View, CountViewType
 
     fun addCount()
     {
-        if (count < 5)
+        if (count < this.maxCount)
         {
             count++
             invalidate() // repaint
