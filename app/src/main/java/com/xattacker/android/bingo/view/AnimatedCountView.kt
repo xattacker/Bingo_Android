@@ -93,7 +93,7 @@ class AnimatedCountView: View, CountViewType
             paint.strokeWidth = width / 10f
 
             val offset = paint.strokeWidth
-            android.util.Log.d("aaa", "offset: " + offset)
+            //android.util.Log.d("aaa", "offset: " + offset)
             var path: LinePath? = null
 
             for (i in 0 .. this.maxCount - 1)
