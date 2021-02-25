@@ -19,7 +19,7 @@ import com.xattacker.android.bingo.logic.BingoLogicListener
 import com.xattacker.android.bingo.util.*
 import com.xattacker.android.bingo.view.*
 
-class BingoActivity : Activity(), BingoLogicListener, FlippableViewListener
+class BingoActivity : Activity(), FlippableViewListener
 {
     companion object
     {
@@ -94,25 +94,6 @@ class BingoActivity : Activity(), BingoLogicListener, FlippableViewListener
         return super.onKeyDown(aKeyCode, aEvent)
     }
 
-    override fun onLineConnected(aTurn: PlayerType, aCount: Int)
-    {
-        if (aTurn == PlayerType.COMPUTER)
-        {
-            binding.viewAiCount.count = aCount
-        }
-        else // PLAYER
-        {
-            binding.viewPlayerCount.count = aCount
-        }
-    }
-
-    override fun onWon(aWinner: PlayerType)
-    {
-        showDialog(
-            AlertTitleType.Notification,
-            getString(if (aWinner == PlayerType.COMPUTER) R.string.YOU_LOSE else R.string.YOU_WIN))
-    }
-
     override fun onFlipStarted(flipped: FlippableView)
     {
         this.binding.layoutPlayerGrid.isEnabled = false
@@ -135,7 +116,7 @@ class BingoActivity : Activity(), BingoLogicListener, FlippableViewListener
 
     private fun initViewModel()
     {
-        viewModel = BingoViewModel(this, GRID_DIMENSION)
+        viewModel = BingoViewModel(GRID_DIMENSION)
 
         // data binding
         viewModel?.gradeRecord?.subscribe {
@@ -162,6 +143,25 @@ class BingoActivity : Activity(), BingoLogicListener, FlippableViewListener
 
                 GameStatus.END -> {}
             }
+        }
+
+        viewModel?.lineConnected?.subscribe {
+            connected: Pair<PlayerType, Int> ->
+            if (connected.first == PlayerType.COMPUTER)
+            {
+                binding.viewAiCount.count = connected.second
+            }
+            else // PLAYER
+            {
+                binding.viewPlayerCount.count = connected.second
+            }
+        }
+
+        viewModel?.onWon?.subscribe {
+            winner: PlayerType ->
+            showDialog(
+                AlertTitleType.Notification,
+                getString(if (winner == PlayerType.COMPUTER) R.string.YOU_LOSE else R.string.YOU_WIN))
         }
     }
 

@@ -2,6 +2,8 @@ package com.xattacker.android.bingo.logic
 
 enum class PlayerType constructor(private val _value: Int)
 {
+    NONE(-1),
+
     COMPUTER(0),
     PLAYER(1);
 

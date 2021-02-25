@@ -24,8 +24,7 @@ class AnimatedCountView: View, CountViewType
 
                 val anim = createValueAnimator(this.alpha, 0f, 200,
                                     {
-                                        value ->
-                                            this.alpha = value
+                                            this.alpha = it
                                     })
 
                 anim.addListener(

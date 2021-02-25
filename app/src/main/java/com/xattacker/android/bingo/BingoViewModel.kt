@@ -6,6 +6,7 @@ import com.xattacker.android.bingo.logic.BingoLogicListener
 import com.xattacker.android.bingo.logic.PlayerType
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import java.lang.ref.WeakReference
 
 enum class GameStatus
@@ -32,25 +33,31 @@ class BingoViewModel: BingoLogicListener
     val status: Observable<GameStatus>
         get() = this.statusSubject
 
+    val lineConnected: Observable<Pair<PlayerType, Int>>
+        get() = this.lineConnectedSubject
+
+    val onWon: Observable<PlayerType>
+        get() = this.wonSubject
+
     private val gradeRecordSubject: BehaviorSubject<GradeRecord> = BehaviorSubject.create()
     private val statusSubject: BehaviorSubject<GameStatus> = BehaviorSubject.createDefault(GameStatus.PREPARE)
+    private val lineConnectedSubject: PublishSubject<Pair<PlayerType, Int>> = PublishSubject.create()
+    private val wonSubject: PublishSubject<PlayerType> =  PublishSubject.create()
+
     private var numDoneCount = 0 // 佈子數, 當玩家把25個數字都佈完後 開始遊戲
     private val recorder = GradeRecorder()
     private var logic: BingoLogic
-    private var logicListener: WeakReference<BingoLogicListener>
 
-    constructor(listener: BingoLogicListener, dimension: Int)
+    constructor(dimension: Int)
     {
         this.logic = BingoLogic(this, dimension)
-        this.logicListener = WeakReference(listener)
 
         this.gradeRecordSubject.onNext(this.recorder)
     }
 
     override fun onLineConnected(aTurn: PlayerType, aCount: Int)
     {
-        // bypass to another listener
-        this.logicListener.get()?.onLineConnected(aTurn, aCount)
+        this.lineConnectedSubject.onNext(Pair(aTurn, aCount))
     }
 
     override fun onWon(aWinner: PlayerType)
@@ -66,9 +73,7 @@ class BingoViewModel: BingoLogicListener
 
         this.gradeRecordSubject.onNext(recorder)
         this.statusSubject.onNext(GameStatus.END)
-
-        // bypass to another listener
-        this.logicListener.get()?.onWon(aWinner)
+        this.wonSubject.onNext(aWinner)
     }
 
     fun addGrid(grid: BingoGridView)
