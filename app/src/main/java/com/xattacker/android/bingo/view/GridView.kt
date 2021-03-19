@@ -130,9 +130,7 @@ class GridView : TextView, BingoGridView
                     ConnectedDirection.VERTICAL ->
                         aCanvas.drawLine((width / 2).toFloat(), 0f, (width / 2).toFloat(), height.toFloat(), _paint)
 
-                    else ->
-                    {
-                    }
+                    else -> {}
                 }
             }
         }
