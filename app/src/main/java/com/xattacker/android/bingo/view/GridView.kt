@@ -9,15 +9,14 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
-import android.view.View
+
 import android.widget.TextView
 import com.xattacker.android.bingo.BingoGridView
 import com.xattacker.android.bingo.CustomProperties
 import com.xattacker.android.bingo.FontType
-import com.xattacker.android.bingo.GradeRecord
-import com.xattacker.android.bingo.logic.BingoGrid
 import com.xattacker.android.bingo.logic.PlayerType
 import com.xattacker.android.bingo.logic.ConnectedDirection
+
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -141,9 +140,9 @@ class GridView : TextView, BingoGridView
         this.isConnected = false
         this.isSelectedOn = false
 
-        for (i in directions.indices)
+        for (i in this.directions.indices)
         {
-            directions[i] = false
+            this.directions[i] = false
         }
 
         this.value = 0
@@ -151,21 +150,21 @@ class GridView : TextView, BingoGridView
 
     override fun isLineConnected(aDirection: ConnectedDirection): Boolean
     {
-        return directions.get(aDirection.value())
+        return this.directions.get(aDirection.value())
     }
 
     override fun setConnectedLine(aDirection: ConnectedDirection, aConnected: Boolean)
     {
-            this.directions[aDirection.value()] = aConnected
+        this.directions[aDirection.value()] = aConnected
 
-            if (!aConnected)
-            {
-                this.isConnected = directions.find {dir -> dir} == true
-            }
-            else
-            {
-                this.isConnected = aConnected
-            }
+        if (!aConnected)
+        {
+            this.isConnected = this.directions.find {dir -> dir} == true
+        }
+        else
+        {
+            this.isConnected = aConnected
+        }
 
         updateBackgroundColor()
         invalidate() // repaint
@@ -201,7 +200,11 @@ class GridView : TextView, BingoGridView
     private fun initView()
     {
         this.gravity = Gravity.CENTER
-        this.setTextSize(TypedValue.COMPLEX_UNIT_PX, CustomProperties.getDimensionPxSize(FontType.NORMAL_FONT_SIZE, context).toFloat())
+
+        this.setTextSize(
+            TypedValue.COMPLEX_UNIT_PX,
+            CustomProperties.getDimensionPxSize(FontType.NORMAL_FONT_SIZE, context).toFloat())
+
         this.setOnClickListener {
             this.clickedSubject.onNext(this)
         }

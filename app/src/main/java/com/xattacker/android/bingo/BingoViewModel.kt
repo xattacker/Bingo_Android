@@ -105,7 +105,7 @@ class BingoViewModel: BingoLogicListener
 
     private fun startPlaying()
     {
-        this.logic.fillNumber()
+        this.logic.fillNumber(PlayerType.COMPUTER)
         this.statusSubject.onNext(GameStatus.PLAYING)
     }
 

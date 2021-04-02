@@ -69,7 +69,7 @@ class BingoLogic
         return _grids[aType.value()].connection
     }
 
-    fun fillNumber(type: PlayerType = PlayerType.COMPUTER)
+    fun fillNumber(type: PlayerType)
     {
         val tag = type.value()
         var temp_value = 0
