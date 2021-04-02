@@ -18,6 +18,7 @@ import com.xattacker.android.bingo.logic.PlayerType
 import com.xattacker.android.bingo.logic.BingoLogicListener
 import com.xattacker.android.bingo.util.*
 import com.xattacker.android.bingo.view.*
+import io.reactivex.disposables.CompositeDisposable
 
 class BingoActivity : Activity(), FlippableViewListener
 {
@@ -28,6 +29,7 @@ class BingoActivity : Activity(), FlippableViewListener
 
     private lateinit var binding: ActivityMainBinding
     private var viewModel: BingoViewModel? = null
+    private val disposableBag = CompositeDisposable()
 
     public override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -71,6 +73,10 @@ class BingoActivity : Activity(), FlippableViewListener
         super.onDestroy()
 
         viewModel = null
+
+        this.disposableBag.clear()
+        this.disposableBag.dispose()
+
         AppProperties.release()
     }
 
@@ -119,13 +125,14 @@ class BingoActivity : Activity(), FlippableViewListener
         viewModel = BingoViewModel(GRID_DIMENSION)
 
         // data binding
-        viewModel?.gradeRecord?.subscribe {
+        var disposable = viewModel?.gradeRecord?.subscribe {
             grade: GradeRecord ->
 
             binding.textRecord.text = getString(R.string.WIN_COUNT, grade.winCount, grade.loseCount)
         }
+        this.disposableBag.add(disposable)
 
-        viewModel?.status?.subscribe {
+        disposable = viewModel?.status?.subscribe {
             status: GameStatus ->
 
             updateButtonWithStatus(status)
@@ -144,8 +151,9 @@ class BingoActivity : Activity(), FlippableViewListener
                 GameStatus.END -> {}
             }
         }
+        this.disposableBag.add(disposable)
 
-        viewModel?.lineConnected?.subscribe {
+        disposable = viewModel?.lineConnected?.subscribe {
             connected: Pair<PlayerType, Int> ->
             if (connected.first == PlayerType.COMPUTER)
             {
@@ -156,13 +164,16 @@ class BingoActivity : Activity(), FlippableViewListener
                 binding.viewPlayerCount.count = connected.second
             }
         }
+        this.disposableBag.add(disposable)
 
-        viewModel?.onWon?.subscribe {
+
+        disposable = viewModel?.onWon?.subscribe {
             winner: PlayerType ->
             showDialog(
                 AlertTitleType.Notification,
                 getString(if (winner == PlayerType.COMPUTER) R.string.YOU_LOSE else R.string.YOU_WIN))
         }
+        this.disposableBag.add(disposable)
     }
 
     private fun updateButtonWithStatus(status: GameStatus)
