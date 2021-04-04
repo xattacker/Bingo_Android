@@ -2,6 +2,7 @@ package com.xattacker.android.bingo
 
 import com.xattacker.android.bingo.logic.PlayerType
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.TestObserver
 import org.junit.After
 import org.junit.Assert
 import org.junit.Test
@@ -31,32 +32,22 @@ class BingoViewModelUnitTest : BingoLogicUnitTest()
         }
 
 
-        var got_status: GameStatus? = null
-        var disposable = viewModel.status.subscribe {
-            status: GameStatus ->
+        val statusObserver = TestObserver<GameStatus>()
+        viewModel.status.subscribe(statusObserver)
+        this.disposableBag.add(statusObserver)
 
-            got_status = status
-        }
-        this.disposableBag.add(disposable)
-
-        var count = 0
-        disposable = viewModel.lineConnected.subscribe {
-            connected: Pair<PlayerType, Int> ->
-            count = connected.second
-        }
-        this.disposableBag.add(disposable)
+        val countObserver = TestObserver<Int>()
+        viewModel.lineConnected.map { connected: Pair<PlayerType, Int> -> connected.second }.subscribe(countObserver)
+        this.disposableBag.add(countObserver)
 
 
-        var got_winner: PlayerType? = null
-        disposable = viewModel.onWon.subscribe {
-            winner: PlayerType ->
-            got_winner = winner
-        }
-        this.disposableBag.add(disposable)
+        val winnerObserver = TestObserver<PlayerType>()
+        viewModel.onWon.subscribe(winnerObserver)
+        this.disposableBag.add(winnerObserver)
 
 
         viewModel.fillNumber()
-        Assert.assertTrue("game status is wrong", got_status == GameStatus.PLAYING)
+        Assert.assertTrue("game status is wrong", statusObserver.values().last() == GameStatus.PLAYING)
 
         do
         {
@@ -68,25 +59,26 @@ class BingoViewModelUnitTest : BingoLogicUnitTest()
                     {
                         grid.click()
 
-                        if (got_winner != null)
+                        if (winnerObserver.isTerminated)
                         {
                             break
                         }
                     }
                 }
 
-                if (got_winner != null)
+                if (winnerObserver.isTerminated)
                 {
                     break
                 }
             }
-        } while (got_winner == null)
+        } while (winnerObserver.isTerminated)
 
-        Assert.assertTrue("winner is wrong", got_winner != null)
-        Assert.assertTrue("connected count is wrong", count == GRID_DIMENSION)
+        Assert.assertTrue("winner is wrong", winnerObserver.values().last() != PlayerType.NONE)
+        //countObserver.assertResult(GRID_DIMENSION)
+        Assert.assertTrue("connected count is wrong", countObserver.values().last() == GRID_DIMENSION)
 
         viewModel.restart()
-        Assert.assertTrue("game status is wrong", got_status == GameStatus.PREPARE)
+        Assert.assertTrue("game status is wrong", statusObserver.values().last() == GameStatus.PREPARE)
     }
 
     @After
