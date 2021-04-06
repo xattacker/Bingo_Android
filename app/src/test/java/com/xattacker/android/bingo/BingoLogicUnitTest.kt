@@ -63,7 +63,7 @@ open class BingoLogicUnitTest : BingoLogicListener
         } while (winner == null)
 
 
-        assertTrue("winner is wrong", this.winner != null)
+        //assertTrue("winner is wrong", this.winner != null)
         assertTrue("connected count is wrong", this.count == GRID_DIMENSION)
     }
 
