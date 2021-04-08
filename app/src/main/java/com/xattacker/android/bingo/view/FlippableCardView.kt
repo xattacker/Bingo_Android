@@ -72,6 +72,16 @@ class FlippableCardView: FlippableView, BingoGridView
             this.gridView.isConnected = value
         }
 
+    override operator fun get(direction: ConnectedDirection): Boolean
+    {
+        return this.gridView[direction]
+    }
+
+    override operator fun set(direction: ConnectedDirection, connected: Boolean)
+    {
+        this.gridView[direction] = connected
+    }
+
     override fun initial()
     {
         this.gridView.initial()
@@ -80,15 +90,5 @@ class FlippableCardView: FlippableView, BingoGridView
         {
             this.flip(false)
         }
-    }
-
-    override fun isLineConnected(aDirection: ConnectedDirection): Boolean
-    {
-        return  this.gridView.isLineConnected(aDirection)
-    }
-
-    override fun setConnectedLine(aDirection: ConnectedDirection, aConnected: Boolean)
-    {
-        this.gridView.setConnectedLine(aDirection, aConnected)
     }
 }

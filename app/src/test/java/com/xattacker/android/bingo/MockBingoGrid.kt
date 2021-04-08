@@ -19,14 +19,27 @@ class MockBingoGrid : BingoGridView
     override val clicked: Observable<BingoGridView>
         get() = this.clickedSubject
 
-    private val clickedSubject: BehaviorSubject<BingoGridView> = BehaviorSubject.create()
-
-    private var directions = BooleanArray(4)
-
-    fun click()
+    override operator fun get(direction: ConnectedDirection): Boolean
     {
-        this.clickedSubject.onNext(this)
+        return this.directions.get(direction.value())
     }
+
+    override operator fun set(direction: ConnectedDirection, connected: Boolean)
+    {
+        this.directions[direction.value()] = connected
+
+        if (!connected)
+        {
+            this.isConnected = this.directions.find {dir -> dir} == true
+        }
+        else
+        {
+            this.isConnected = connected
+        }
+    }
+
+    private val clickedSubject: BehaviorSubject<BingoGridView> = BehaviorSubject.create()
+    private var directions = BooleanArray(4)
 
     override fun initial()
     {
@@ -41,22 +54,8 @@ class MockBingoGrid : BingoGridView
         this.value = 0
     }
 
-    override fun isLineConnected(aDirection: ConnectedDirection): Boolean
+    fun click()
     {
-        return this.directions.get(aDirection.value())
-    }
-
-    override fun setConnectedLine(aDirection: ConnectedDirection, aConnected: Boolean)
-    {
-        this.directions[aDirection.value()] = aConnected
-
-        if (!aConnected)
-        {
-            this.isConnected = this.directions.find {dir -> dir} == true
-        }
-        else
-        {
-            this.isConnected = aConnected
-        }
+        this.clickedSubject.onNext(this)
     }
 }

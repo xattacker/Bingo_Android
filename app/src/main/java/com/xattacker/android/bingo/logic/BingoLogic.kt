@@ -165,7 +165,7 @@ class BingoLogic
 
             while (x >= 0 && x < this.dimension && y >= 0 && y < this.dimension && _grids[_turn.value()].grids[x][y]?.isSelectedOn == true)
             {
-                _grids[_turn.value()].grids[x][y]?.setConnectedLine(aDirection, true)
+                _grids[_turn.value()].grids[x][y]?.also { it[aDirection] = true }
                 x = x + offset.first
                 y = y + offset.second
             }
@@ -175,7 +175,7 @@ class BingoLogic
 
             while (x >= 0 && x < this.dimension && y >= 0 && y < this.dimension && _grids[_turn.value()].grids[x][y]?.isSelectedOn == true)
             {
-                _grids[_turn.value()].grids[x][y]?.setConnectedLine(aDirection, true)
+                _grids[_turn.value()].grids[x][y]?.also { it[aDirection] = true }
                 x = x - offset.first
                 y = y - offset.second
             }

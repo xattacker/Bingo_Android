@@ -7,7 +7,8 @@ interface BingoGrid
     var isSelectedOn: Boolean // could not use name isSelected: it will cause accidental override with class View
     var isConnected: Boolean
 
+    operator fun get(direction: ConnectedDirection): Boolean
+    operator fun set(direction: ConnectedDirection, connected: Boolean)
+
     fun initial()
-    fun isLineConnected(aDirection: ConnectedDirection): Boolean
-    fun setConnectedLine(aDirection: ConnectedDirection, aConnected: Boolean)
 }
