@@ -195,7 +195,7 @@ class AnimatedCountView: View, CountViewType
 }
 
 
- fun Any.createValueAnimator(from: Float, to: Float, duration: Long, monitor: ((value: Float) -> Unit)): ValueAnimator
+fun Any.createValueAnimator(from: Float, to: Float, duration: Long, monitor: ((value: Float) -> Unit)): ValueAnimator
 {
     val anim = ValueAnimator.ofFloat(from, to)
 
