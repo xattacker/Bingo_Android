@@ -1,9 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xattacker.android.bingo">
 
-    <!-- for PowerManager WakeLock -->
- 	<uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <!-- for avoid to filter portrait supported only on market
          (because set attribute android:screenOrientation=portrait) 
     -->
