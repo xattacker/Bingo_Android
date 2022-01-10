@@ -4,9 +4,6 @@
     <!-- for PowerManager WakeLock -->
  	<uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <!-- for shortcut installation -->
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-   
     <!-- for avoid to filter portrait supported only on market
          (because set attribute android:screenOrientation=portrait) 
     -->
