@@ -138,6 +138,8 @@ class BingoViewModel: BingoLogicListener
 
             GameStatus.END ->
                 restart()
+
+            else -> {}
         }
     }
 }

@@ -43,21 +43,21 @@ open class FlippableView: FrameLayout
 
         aniLeftIn.addListener(object : Animator.AnimatorListener
         {
-            override fun onAnimationStart(p0: Animator?)
+            override fun onAnimationStart(p0: Animator)
             {
                 priListener?.get()?.onFlipStarted(this@FlippableView)
             }
 
-            override fun onAnimationEnd(p0: Animator?)
+            override fun onAnimationEnd(p0: Animator)
             {
                 priListener?.get()?.onFlipEnded(this@FlippableView)
             }
 
-            override fun onAnimationCancel(p0: Animator?)
+            override fun onAnimationCancel(p0: Animator)
             {
             }
 
-            override fun onAnimationRepeat(p0: Animator?)
+            override fun onAnimationRepeat(p0: Animator)
             {
             }
         })
