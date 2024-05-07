@@ -55,8 +55,19 @@ android {
         }
     }
 
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
     productFlavors {
     }
+
+    namespace 'com.xattacker.android.bingo'
 }
 
 if (System.getenv('PRIVATE_GOOGLE_PLAY_PUBLISH_API_KEY_PATH') != null) {
