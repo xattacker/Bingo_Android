@@ -108,12 +108,12 @@ class GridView : TextView, BingoGridView
         initView()
     }
 
-    override fun onDraw(aCanvas: Canvas)
+    override fun onDraw(canvas: Canvas)
     {
-        super.onDraw(aCanvas)
+        super.onDraw(canvas)
 
-        val width = width
-        val height = height
+        val width = width.toFloat()
+        val height = height.toFloat()
 
         _paint.color = borderColor
         _paint.strokeWidth = borderWidth
@@ -121,15 +121,17 @@ class GridView : TextView, BingoGridView
         when (borderAngleType)
         {
             BorderAngleType.ANGLE_ROUND ->
-                aCanvas.drawRoundRect(RectF(0f, 0f, (width - 1).toFloat(), (height - 1).toFloat()), 5f, 5f, _paint)
+                canvas.drawRoundRect(RectF(0f, 0f, width - 1, height - 1), 5f, 5f, _paint)
 
             BorderAngleType.ANGLE_RIGHT ->
-                aCanvas.drawRect(0f, 0f, (width - 1).toFloat(), (height - 1).toFloat(), _paint)
+                canvas.drawRect(0f, 0f, width - 1, height - 1, _paint)
         }
 
 
         _paint.color = 0x400000FF
-        _paint.strokeWidth = 5f
+        _paint.strokeWidth = 6f
+
+        val offset = width / 12f
 
         // draw connected line
         for (i in directions.indices)
@@ -139,16 +141,16 @@ class GridView : TextView, BingoGridView
                 when (ConnectedDirection.parse(i))
                 {
                     ConnectedDirection.LEFT_TOP_RIGHT_BOTTOM ->
-                        aCanvas.drawLine(0f, 0f, width.toFloat(), height.toFloat(), _paint)
+                        canvas.drawLine(-offset, -offset, width + offset, height + offset, _paint)
 
                     ConnectedDirection.RIGHT_TOP_LEFT_BOTTOM ->
-                        aCanvas.drawLine(width.toFloat(), 0f, 0f, height.toFloat(), _paint)
+                        canvas.drawLine(width + offset, -offset, -offset, height + offset, _paint)
 
                     ConnectedDirection.HORIZONTAL ->
-                        aCanvas.drawLine(0f, (height / 2).toFloat(), width.toFloat(), (height / 2).toFloat(), _paint)
+                        canvas.drawLine(-offset, height / 2, width + offset, height / 2, _paint)
 
                     ConnectedDirection.VERTICAL ->
-                        aCanvas.drawLine((width / 2).toFloat(), 0f, (width / 2).toFloat(), height.toFloat(), _paint)
+                        canvas.drawLine(width / 2, -offset, width / 2, height + offset, _paint)
 
                     else -> {}
                 }

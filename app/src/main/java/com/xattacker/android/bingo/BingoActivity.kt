@@ -200,28 +200,32 @@ class BingoActivity : Activity(), FlippableViewListener
         }
     }
 
-    private fun setupGrid(aTable: TableLayout?, type: PlayerType)
+    private fun setupGrid(container: TableLayout, type: PlayerType)
     {
         var row: TableRow?
         var grid: View?
         val width = CustomProperties.getScreenWidth(0.125f)
         val padding = (1.8 * AppProperties.density).toInt()
 
+        container.clipChildren = false
+
         for (i in 0 .. GRID_DIMENSION - 1)
         {
             row = TableRow(this)
             row.gravity = Gravity.CENTER
-            aTable?.addView(row)
+            row.clipChildren = false
+            container.addView(row)
 
             for (j in 0 .. GRID_DIMENSION - 1)
             {
                 if (type == PlayerType.PLAYER)
                 {
-                    grid =  GridView(this)
+                    grid = GridView(this)
                 }
                 else // COMPUTER
                 {
-                    grid =  FlippableCardView(this)
+                    grid = FlippableCardView(this)
+                    grid.clipChildren = false
                     grid.listener = this
                 }
 
