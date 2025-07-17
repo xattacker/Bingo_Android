@@ -129,7 +129,7 @@ class GridView : TextView, BingoGridView
 
 
         _paint.color = 0x400000FF
-        _paint.strokeWidth = 6f
+        _paint.strokeWidth = 8f
 
         val offset = width / 12f
 
