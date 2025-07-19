@@ -239,7 +239,11 @@ class BingoActivity : Activity(), FlippableViewListener
                 }
 
                 val para = TableRow.LayoutParams(width, width)
-                para.setMargins(padding, padding, padding, padding)
+                para.setMargins(
+                     if (j == 0) 0 else padding,
+                     if (i == 0) padding/2 else padding,
+                     if (j == GRID_DIMENSION - 1) 0 else padding,
+                     if (i == GRID_DIMENSION - 1) padding/2 else padding)
                 row.addView(grid, para)
             }
         }

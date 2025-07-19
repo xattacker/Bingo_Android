@@ -121,10 +121,17 @@ class GridView : TextView, BingoGridView
         when (borderAngleType)
         {
             BorderAngleType.ANGLE_ROUND ->
-                canvas.drawRoundRect(RectF(0f, 0f, width - 1, height - 1), 5f, 5f, _paint)
+                canvas.drawRoundRect(RectF(1f, 1f, width - 1, height - 1),
+                                    5f,
+                                    5f,
+                                    _paint)
 
             BorderAngleType.ANGLE_RIGHT ->
-                canvas.drawRect(0f, 0f, width - 1, height - 1, _paint)
+                canvas.drawRect(1f,
+                                1f,
+                                width - 1,
+                                height - 1,
+                                _paint)
         }
 
 
